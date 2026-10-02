@@ -2,7 +2,9 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#0b0f19" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
   <title>ЧеркасиRoute — Оптимізатор маршрутів доставки</title>
 
   <!-- Скрипт перевірки збереженої теми (запобігає мерехтінню) -->
@@ -51,6 +53,10 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <style>
+    :root {
+      color-scheme: light dark;
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-tap-highlight-color: transparent;
@@ -69,78 +75,189 @@
       padding-top: env(safe-area-inset-top, 0px);
     }
 
-    /* ================= 100% ГАРАНТОВАНИЙ ТЕМНИЙ РЕЖИМ (ВИПРАВЛЕННЯ ТЕКСТУ) ================= */
-    /* Жорстко закріплені кольори, які ніколи не ламаються на мобільних телефонах */
+    /* Приховування скролбару для горизонтального скролу чіпів */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* ================= 100% ГАРАНТОВАНИЙ ТЕМНИЙ РЕЖИМ (ВИПРАВЛЕННЯ ТЕКСТУ ВУЛИЦЬ) ================= */
+    html.dark {
+      color-scheme: dark !important;
+    }
+    html:not(.dark) {
+      color-scheme: light !important;
+    }
+
     html.dark, html.dark body {
       background-color: #0b0f19 !important;
       color: #ffffff !important;
     }
 
-    html.dark input[type="text"],
-    html.dark textarea {
-      background-color: #1e293b !important;
+    /* ЖОРСТКО ЗАФІКСОВАНА ЧИТАБЕЛЬНІСТЬ ТЕКСТУ ПРИ ВВЕДЕННІ ВУЛИЦЬ НА БУДЬ-ЯКОМУ ТЕЛЕФОНІ */
+    html.dark input,
+    html.dark textarea,
+    html.dark select,
+    html.dark .street-input,
+    html.dark .bulk-input-text,
+    .dark input,
+    .dark textarea,
+    .dark .street-input,
+    .dark .bulk-input-text {
       color: #ffffff !important;
       -webkit-text-fill-color: #ffffff !important;
-      border: 1.5px solid #475569 !important;
-      caret-color: #818cf8 !important;
+      background-color: #1e293b !important;
+      border-color: #475569 !important;
+      caret-color: #38bdf8 !important;
     }
 
-    html.dark input[type="text"]:focus,
-    html.dark textarea:focus {
-      background-color: #0f172a !important;
-      border-color: #6366f1 !important;
-      outline: none !important;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4) !important;
-    }
-
+    /* Плейсхолдер у темній темі - високий контраст */
     html.dark input::placeholder,
-    html.dark textarea::placeholder {
+    html.dark textarea::placeholder,
+    html.dark .street-input::placeholder,
+    .dark input::placeholder,
+    .dark textarea::placeholder,
+    .dark .street-input::placeholder {
       color: #94a3b8 !important;
       -webkit-text-fill-color: #94a3b8 !important;
       opacity: 1 !important;
     }
 
+    /* КРИТИЧНО ДЛЯ СМАРТФОНІВ (ANDROID CHROME ТА IOS SAFARI): ВИПРАВЛЕННЯ ЧОРНОГО ТЕКСТУ АВТОЗАПОВНЕННЯ */
+    html.dark input:-webkit-autofill,
+    html.dark input:-webkit-autofill:hover, 
+    html.dark input:-webkit-autofill:focus,
+    html.dark input:-webkit-autofill:active,
+    html.dark textarea:-webkit-autofill,
+    html.dark textarea:-webkit-autofill:hover,
+    html.dark textarea:-webkit-autofill:focus,
+    .dark input:-webkit-autofill,
+    .dark textarea:-webkit-autofill {
+      -webkit-text-fill-color: #ffffff !important;
+      -webkit-box-shadow: 0 0 0px 1000px #1e293b inset !important;
+      box-shadow: 0 0 0px 1000px #1e293b inset !important;
+      transition: background-color 5000s ease-in-out 0s !important;
+      color: #ffffff !important;
+    }
+
+    /* Світлий режим для полів */
+    html:not(.dark) .street-input,
+    html:not(.dark) input[type="text"],
+    html:not(.dark) textarea {
+      color: #0f172a !important;
+      -webkit-text-fill-color: #0f172a !important;
+      caret-color: #4f46e5 !important;
+    }
+
+    /* СТИЛІ КАРТОЧКИ ВВЕДЕННЯ АДРЕСИ (ADDRESS ITEM CARD) */
+    .address-item-card {
+      transition: all 0.2s ease;
+    }
+    html.dark .address-item-card {
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+    }
+    html:not(.dark) .address-item-card {
+      background-color: #ffffff !important;
+      border-color: #cbd5e1 !important;
+    }
+    html.dark .address-item-card:focus-within {
+      border-color: #6366f1 !important;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.35) !important;
+    }
+    html:not(.dark) .address-item-card:focus-within {
+      border-color: #4f46e5 !important;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2) !important;
+    }
+
+    /* КАСТОМНИЙ DROPDOWN АВТОДОПОВНЕННЯ ВУЛИЦЬ ЧЕРКАС (ВИСОКИЙ КОНТРАСТ НА МОБІЛЬНИХ) */
+    .autocomplete-dropdown {
+      background-color: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+    }
+    html.dark .autocomplete-dropdown,
+    .dark .autocomplete-dropdown {
+      background-color: #0f172a !important;
+      border: 1.5px solid #334155 !important;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.8), 0 8px 10px -6px rgba(0, 0, 0, 0.8) !important;
+    }
+    .autocomplete-dropdown button {
+      min-height: 42px;
+    }
+    html.dark .autocomplete-dropdown button,
+    .dark .autocomplete-dropdown button {
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+      background-color: transparent;
+    }
+    html.dark .autocomplete-dropdown button:hover,
+    html.dark .autocomplete-dropdown button:active,
+    .dark .autocomplete-dropdown button:hover,
+    .dark .autocomplete-dropdown button:active {
+      background-color: #1e293b !important;
+    }
+
+    /* Додатковий захист: системна темна тема у разі відсутності класу */
+    @media (prefers-color-scheme: dark) {
+      html:not(.light) .street-input,
+      html:not(.light) input,
+      html:not(.light) textarea {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        caret-color: #38bdf8 !important;
+      }
+      html:not(.light) input:-webkit-autofill,
+      html:not(.light) textarea:-webkit-autofill {
+        -webkit-text-fill-color: #ffffff !important;
+        -webkit-box-shadow: 0 0 0px 1000px #1e293b inset !important;
+      }
+    }
+
+    /* Фонове заповнення та межі контейнерів у темній темі */
     html.dark .bg-white {
       background-color: #111827 !important;
       color: #ffffff !important;
       border-color: #1f2937 !important;
     }
-
-    html.dark .bg-slate-50 {
-      background-color: #1e293b !important;
-      color: #ffffff !important;
-    }
-
+    html.dark .bg-slate-50,
     html.dark .bg-slate-100 {
       background-color: #1e293b !important;
       color: #ffffff !important;
     }
-
     html.dark .text-slate-900,
     html.dark .text-slate-800,
     html.dark .text-slate-700 {
       color: #ffffff !important;
     }
-
     html.dark .text-slate-500,
     html.dark .text-slate-600 {
       color: #cbd5e1 !important;
     }
-
     html.dark .border-slate-100,
     html.dark .border-slate-200,
     html.dark .border-slate-300 {
       border-color: #334155 !important;
     }
-
     html.dark .chip-hub {
       background-color: #1e293b !important;
       color: #f1f5f9 !important;
       border-color: #475569 !important;
     }
-    html.dark .chip-hub:hover {
+    html.dark .chip-hub:hover,
+    html.dark .chip-hub:active {
       background-color: #334155 !important;
       color: #ffffff !important;
+    }
+    html.dark .stop-card-inner {
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+    }
+    html.dark .stop-title {
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
     }
 
     /* Нічний режим для карти OpenStreetMap */
@@ -341,7 +458,7 @@
   </header>
 
   <!-- ==================== ГОЛОВНА РОБОЧА ЗОНА ==================== -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-2.5 sm:p-4 lg:p-6 flex flex-col mb-18 lg:mb-0">
+  <main class="flex-1 max-w-7xl w-full mx-auto p-2.5 sm:p-4 lg:p-6 flex flex-col pb-24 sm:pb-20 lg:pb-8 lg:mb-0">
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 flex-1 items-start">
       
@@ -349,7 +466,7 @@
       <section id="sidebar-panel" class="lg:col-span-5 flex flex-col space-y-4 w-full">
         
         <!-- Карточка: Введення адрес -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-3.5 sm:p-5 transition">
+        <div id="address-input-card" class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-3 sm:p-5 transition">
           
           <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-3">
             <div class="flex items-center space-x-2">
@@ -368,34 +485,43 @@
             </div>
           </div>
 
-          <!-- Швидкі чіпи популярних хабів Черкас -->
+          <!-- Швидкі чіпи популярних хабів Черкас (Горизонтальний свайп на смартфонах) -->
           <div class="mb-3">
-            <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1.5">
-              Швидке додавання локацій Черкас:
-            </span>
-            <div class="flex flex-wrap gap-1.5" id="quick-hubs-chips">
-              <button type="button" data-addr="бул. Шевченка, 208" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+                Швидкі локації (1 клік):
+              </span>
+              <span class="text-[10px] text-slate-400 dark:text-slate-500 sm:hidden">гортайте ➔</span>
+            </div>
+            <div class="flex gap-1.5 overflow-x-auto pb-1 pt-0.5 no-scrollbar sm:flex-wrap" id="quick-hubs-chips">
+              <button type="button" data-addr="бул. Шевченка, 208" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
                 🏢 ТРЦ Любава
               </button>
-              <button type="button" data-addr="просп. Перемоги, 29" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="просп. Перемоги, 29" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
                 🛒 Епіцентр
               </button>
-              <button type="button" data-addr="вул. Смілянська, 2" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="вул. Смілянська, 2" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
                 🏬 Центр. ринок
               </button>
-              <button type="button" data-addr="вул. Припортова, 34" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="вул. Припортова, 34" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
                 🛍️ Дніпро-Плаза
               </button>
-              <button type="button" data-addr="вул. Хоменка, 15" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="вул. Хоменка, 15" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
                 📦 Нова Пошта №1
               </button>
-              <button type="button" data-addr="вул. Володимира Ложешнікова, 1" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="вул. Володимира Ложешнікова, 1" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
                 🚆 Вокзал
+              </button>
+              <button type="button" data-addr="вул. Сумгаїтська, 10" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+                🏘️ ПЗР
+              </button>
+              <button type="button" data-addr="вул. Героїв Дніпра, 23" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+                ⛵ Митниця
               </button>
             </div>
           </div>
 
-          <!-- Datalist для швидкого автодоповнення вулиць Черкас -->
+          <!-- Datalist для резервного автодоповнення вулиць Черкас -->
           <datalist id="cherkasy-streets">
             <option value="бульвар Шевченка"></option>
             <option value="вулиця Смілянська"></option>
@@ -421,13 +547,13 @@
 
           <!-- РЕЖИМ 1: Динамічний список полів -->
           <div id="fields-mode-container" class="space-y-2.5">
-            <div id="address-inputs-list" class="space-y-2 max-h-[320px] sm:max-h-[360px] overflow-y-auto pr-1">
+            <div id="address-inputs-list" class="space-y-2.5 max-h-[380px] sm:max-h-[440px] overflow-y-auto pr-0.5">
               <!-- Поля генеруються динамічно через JavaScript -->
             </div>
 
             <div class="flex items-center space-x-2 pt-1.5">
               <button id="btn-add-field" type="button" 
-                      class="flex-1 inline-flex items-center justify-center py-2.5 px-3 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-bold text-brand-600 dark:text-brand-400 bg-brand-50/50 dark:bg-slate-800/80 hover:bg-brand-50 dark:hover:bg-slate-800 hover:border-brand-400 focus:outline-none transition active:scale-98">
+                      class="flex-1 inline-flex items-center justify-center py-3 px-3 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-bold text-brand-600 dark:text-brand-400 bg-brand-50/50 dark:bg-slate-800/80 hover:bg-brand-50 dark:hover:bg-slate-800 hover:border-brand-400 focus:outline-none transition active:scale-98">
                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -435,7 +561,7 @@
               </button>
 
               <button id="btn-use-geolocation" type="button" 
-                      class="inline-flex items-center py-2.5 px-3 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none transition active:scale-95 shadow-xs"
+                      class="inline-flex items-center py-3 px-3 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none transition active:scale-95 shadow-xs"
                       title="Визначити точне супутникове GPS місцезнаходження">
                 <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 mr-1 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -452,10 +578,10 @@
               Вставте адреси списком (по одній у рядку). Дописувати "Черкаси" не обов'язково:
             </p>
             <textarea id="bulk-textarea" rows="7" 
-                      class="w-full text-sm rounded-xl border border-slate-300 dark:border-slate-700 shadow-inner focus:border-brand-500 focus:ring-brand-500 p-3 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 font-bold dark:caret-brand-400"
+                      class="bulk-input-text w-full text-sm sm:text-base rounded-xl border border-slate-300 dark:border-slate-700 shadow-inner focus:border-brand-500 focus:ring-2 focus:ring-brand-500 p-3 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 font-bold dark:caret-brand-400"
                       placeholder="бул. Шевченка, 185&#10;вул. Смілянська, 2&#10;вул. Хрещатик, 223&#10;вул. Сумгаїтська, 10"></textarea>
             <button id="btn-import-bulk" type="button" 
-                    class="w-full py-2.5 bg-slate-900 dark:bg-brand-600 hover:bg-black dark:hover:bg-brand-700 text-white text-xs font-bold rounded-xl transition shadow-sm active:scale-98">
+                    class="w-full py-3 bg-slate-900 dark:bg-brand-600 hover:bg-black dark:hover:bg-brand-700 text-white text-xs sm:text-sm font-bold rounded-xl transition shadow-sm active:scale-98">
               Застосувати список адрес
             </button>
           </div>
@@ -604,7 +730,7 @@
       </section>
 
       <!-- ПРАВА КОЛОНКА: Інтерактивна карта OpenStreetMap (7 колонок) -->
-      <section id="map-panel" class="lg:col-span-7 flex flex-col h-[520px] lg:h-[calc(100vh-100px)] lg:sticky lg:top-20 w-full">
+      <section id="map-panel" class="lg:col-span-7 flex flex-col h-[calc(100dvh-155px)] min-h-[460px] lg:h-[calc(100vh-100px)] lg:sticky lg:top-20 w-full">
         
         <div id="map-card-container" class="relative w-full h-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 flex flex-col transition">
           
@@ -1009,6 +1135,163 @@
       if (b) b.textContent = state.addresses.length;
     }
 
+    // --- СПИСОК ВУЛИЦЬ ЧЕРКАС ДЛЯ КАСТОМНОГО АВТОДОПОВНЕННЯ (100% ЧИТАБЕЛЬНІСТЬ У ТЕМНІЙ ТЕМІ) ---
+    const CHERKASY_POPULAR_STREETS = [
+      'бульвар Шевченка',
+      'вулиця Смілянська',
+      'вулиця Хрещатик',
+      'вулиця Сумгаїтська',
+      'вулиця Володимира Великого',
+      'проспект Перемоги',
+      'проспект Хіміків',
+      'вулиця Благовісна',
+      'вулиця Надпільна',
+      'вулиця Припортова',
+      'вулиця Гоголя',
+      'вулиця Байди Вишневецького',
+      'вулиця Остафія Дашковича',
+      'вулиця Святотроїцька',
+      'вулиця В\'ячеслава Чорновола',
+      'вулиця Пастерівська',
+      'вулиця Гетьмана Сагайдачного',
+      'вулиця Руставі',
+      'вулиця Тараскова',
+      'вулиця Одеська',
+      'вулиця Різдвяна',
+      'вулиця Юрія Іллєнка',
+      'вулиця Чехова',
+      'вулиця Вернигори',
+      'вулиця Пацаєва',
+      'вулиця Гагаріна',
+      'вулиця Сінна',
+      'вулиця Кобзарська',
+      'вулиця Гуржіївська',
+      'вулиця Молоткова',
+      'вулиця Чіковані',
+      'вулиця Кривалівська',
+      'вулиця Митницька',
+      'вулиця Університетська',
+      'вулиця Героїв Дніпра',
+      'вулиця Козацька',
+      'вулиця Сержанта Смірнова',
+      'вулиця Сержанта Жужоми',
+      'вулиця Нижня Горова',
+      'вулиця Верхня Горова',
+      'вулиця Корольова',
+      'вулиця Лесі Українки',
+      'вулиця Івана Франка',
+      'вулиця Небесної Сотні',
+      'вулиця Праведниці Шулежко',
+      'вулиця Добровольчих батальйонів',
+      'вулиця Максима Залізняка',
+      'вулиця Оборонна',
+      'вулиця Громова',
+      'вулиця Хоменка',
+      'вулиця Луценка',
+      'вулиця Героїв Майдану',
+      'вулиця Канівська',
+      'вулиця Дахнівська',
+      'вулиця 30-річчя Перемоги',
+      'вулиця Симиренківська',
+      'вулиця Чигиринська',
+      'вулиця Поліська',
+      'вулиця Першотравнева',
+      'вулиця Михайла Грушевського',
+      'вулиця Подолинського',
+      'вулиця Володимира Ложешнікова',
+      'вулиця Садова',
+      'вулиця Квіткова',
+      'провулок Піщаний',
+      'провулок Можайського',
+      'провулок Енергетиків',
+      'площа Соборна',
+      'площа 700-річчя Черкас',
+      'площа Перемоги'
+    ];
+
+    function setupAutocomplete(input, listEl, addrId) {
+      function renderSuggestions(query) {
+        const rawQ = query.trim().toLowerCase();
+        if (rawQ.length < 2) {
+          listEl.innerHTML = '';
+          listEl.classList.add('hidden');
+          return;
+        }
+
+        const cleanQ = rawQ.replace(/^(вул\.|вулиця|просп\.|проспект|бул\.|бульвар|пров\.|площа)\s*/i, '').trim();
+        const matches = CHERKASY_POPULAR_STREETS.filter(st => {
+          const lower = st.toLowerCase();
+          return lower.includes(rawQ) || (cleanQ.length >= 2 && lower.includes(cleanQ));
+        }).slice(0, 6);
+
+        if (matches.length === 0) {
+          listEl.innerHTML = '';
+          listEl.classList.add('hidden');
+          return;
+        }
+
+        listEl.innerHTML = '';
+        matches.forEach(st => {
+          const itemBtn = document.createElement('button');
+          itemBtn.type = 'button';
+          itemBtn.className = 'w-full text-left px-3 py-2.5 flex items-center justify-between text-xs sm:text-sm font-bold border-b border-slate-100 dark:border-slate-800/80 last:border-0 transition active:scale-98 cursor-pointer';
+
+          const targetPart = cleanQ.length >= 2 ? cleanQ : rawQ;
+          const regex = new RegExp(`(${targetPart})`, 'gi');
+          const highlighted = escapeHtml(st).replace(regex, '<span class="text-amber-500 dark:text-amber-300 underline font-black">$1</span>');
+
+          itemBtn.innerHTML = `
+            <div class="flex items-center space-x-2 truncate pointer-events-none">
+              <span class="text-brand-500 dark:text-brand-400 flex-shrink-0">📍</span>
+              <span class="truncate">${highlighted}</span>
+            </div>
+            <span class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold flex-shrink-0 ml-1.5 pointer-events-none">Черкаси</span>
+          `;
+
+          const selectHandler = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            selectStreet(st);
+          };
+
+          itemBtn.addEventListener('mousedown', selectHandler);
+          itemBtn.addEventListener('touchstart', selectHandler, { passive: false });
+
+          listEl.appendChild(itemBtn);
+        });
+
+        listEl.classList.remove('hidden');
+      }
+
+      function selectStreet(st) {
+        input.value = `${st}, `;
+        updateAddressText(addrId, input.value);
+        listEl.innerHTML = '';
+        listEl.classList.add('hidden');
+        input.focus();
+        const len = input.value.length;
+        input.setSelectionRange(len, len);
+      }
+
+      input.addEventListener('input', (e) => {
+        updateAddressText(addrId, e.target.value);
+        renderSuggestions(e.target.value);
+      });
+
+      input.addEventListener('focus', () => {
+        if (input.value.trim().length >= 2) {
+          renderSuggestions(input.value);
+        }
+      });
+
+      input.addEventListener('blur', () => {
+        setTimeout(() => {
+          listEl.innerHTML = '';
+          listEl.classList.add('hidden');
+        }, 220);
+      });
+    }
+
     function renderAddressInputs() {
       const container = document.getElementById('address-inputs-list');
       container.innerHTML = '';
@@ -1017,51 +1300,67 @@
         const isStart = index === 0;
         const row = document.createElement('div');
         
-        row.className = `flex items-center space-x-2 p-1.5 rounded-xl border transition-all ${
+        row.className = `address-item-card p-2 sm:p-2.5 rounded-2xl border transition-all ${
           item.error 
             ? 'border-rose-400 dark:border-rose-700 bg-rose-50/70 dark:bg-rose-950/50' 
-            : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-brand-400 dark:hover:border-slate-600 shadow-2xs'
+            : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800/95 hover:border-brand-400 dark:hover:border-slate-600 shadow-2xs'
         }`;
 
         row.innerHTML = `
-          <!-- Номер зупинки -->
-          <div class="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black ${
-            isStart ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700' : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-100'
-          }">
-            ${isStart ? '1' : (index + 1)}
-          </div>
+          <!-- Головний рядок: Номер + Поле адреси (на всю ширину) + Видалення -->
+          <div class="flex items-center space-x-2">
+            <!-- Номер зупинки -->
+            <div class="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black ${
+              isStart ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700' : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-100'
+            }">
+              ${isStart ? '1' : (index + 1)}
+            </div>
 
-          <!-- Поле адреси з контрастним текстом -->
-          <div class="flex-1 relative min-w-0">
-            <input id="input-${item.id}" type="text" 
-                   list="cherkasy-streets"
-                   value="${escapeHtml(item.text)}"
-                   placeholder="Введіть вулицю та номер (Черкаси)"
-                   class="w-full py-1.5 px-2 rounded-lg border-0 bg-transparent focus:ring-2 focus:ring-brand-500 placeholder-slate-400 dark:placeholder-slate-400 font-bold text-slate-900 dark:text-white text-sm dark:caret-brand-400 tracking-tight"
-            />
-            ${item.error ? `<span class="text-[10px] text-rose-600 dark:text-rose-400 font-bold block px-2 pb-0.5">${item.error}</span>` : ''}
-          </div>
+            <!-- Поле адреси з кастомним автодоповненням на всю ширину -->
+            <div class="flex-1 relative min-w-0">
+              <input id="input-${item.id}" type="text" 
+                     autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"
+                     value="${escapeHtml(item.text)}"
+                     placeholder="Вулиця та номер (напр. Смілянська, 2)"
+                     class="street-input w-full py-1.5 px-2.5 rounded-lg border-0 bg-transparent font-bold text-slate-900 dark:text-white text-sm sm:text-base outline-none tracking-tight"
+              />
+              <!-- Dropdown список підказок вулиць -->
+              <div id="autocomplete-list-${item.id}" class="autocomplete-dropdown hidden absolute left-0 right-0 top-full mt-1.5 z-50 rounded-xl shadow-2xl border max-h-56 overflow-y-auto"></div>
+              ${item.error ? `<span class="text-[10px] text-rose-600 dark:text-rose-400 font-bold block px-2 pb-0.5">${item.error}</span>` : ''}
+            </div>
 
-          <!-- Кнопки вгору/вниз -->
-          <div class="flex items-center space-x-0.5 text-slate-500 dark:text-slate-400">
-            <button type="button" class="btn-move-up p-1.5 hover:text-slate-900 dark:hover:text-white rounded-lg transition active:scale-90 ${index === 0 ? 'opacity-20 cursor-not-allowed' : ''}" 
-                    title="Вгору" ${index === 0 ? 'disabled' : ''}>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" /></svg>
-            </button>
-            <button type="button" class="btn-move-down p-1.5 hover:text-slate-900 dark:hover:text-white rounded-lg transition active:scale-90 ${index === state.addresses.length - 1 ? 'opacity-20 cursor-not-allowed' : ''}" 
-                    title="Вниз" ${index === state.addresses.length - 1 ? 'disabled' : ''}>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+            <!-- Кнопка видалення -->
+            <button type="button" class="btn-remove-addr p-2 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/50 transition active:scale-90 flex-shrink-0" title="Видалити адресу">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </div>
 
-          <!-- Кнопка видалення -->
-          <button type="button" class="btn-remove-addr p-1.5 text-slate-400 dark:text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/50 transition active:scale-90" title="Видалити">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
+          <!-- Нижній рядок: Статус точки + Переміщення вгору/вниз -->
+          <div class="flex items-center justify-between mt-1 pt-1 border-t border-slate-100 dark:border-slate-700/60 text-[11px]">
+            <span class="text-slate-400 dark:text-slate-500 font-medium pl-1 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full ${isStart ? 'bg-emerald-500' : 'bg-brand-500'}"></span>
+              ${isStart ? 'Старт (Склад / Депо)' : `Точка №${index + 1}`}
+            </span>
+
+            <div class="flex items-center space-x-1 text-slate-500 dark:text-slate-400">
+              <button type="button" class="btn-move-up px-2 py-0.5 hover:text-slate-900 dark:hover:text-white rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition active:scale-90 font-bold flex items-center gap-0.5 ${index === 0 ? 'opacity-20 cursor-not-allowed' : ''}" 
+                      title="Вгору" ${index === 0 ? 'disabled' : ''}>
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" /></svg>
+                <span>Вгору</span>
+              </button>
+              <button type="button" class="btn-move-down px-2 py-0.5 hover:text-slate-900 dark:hover:text-white rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition active:scale-90 font-bold flex items-center gap-0.5 ${index === state.addresses.length - 1 ? 'opacity-20 cursor-not-allowed' : ''}" 
+                      title="Вниз" ${index === state.addresses.length - 1 ? 'disabled' : ''}>
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+                <span>Вниз</span>
+              </button>
+            </div>
+          </div>
         `;
 
         const input = row.querySelector(`#input-${item.id}`);
-        input.addEventListener('input', (e) => updateAddressText(item.id, e.target.value));
+        const autoList = row.querySelector(`#autocomplete-list-${item.id}`);
+        setupAutocomplete(input, autoList, item.id);
+
         input.addEventListener('keydown', (e) => {
           if (e.key === 'Enter') {
             e.preventDefault();
@@ -1080,7 +1379,7 @@
     // --- ПІДВИЩЕНА ТОЧНІСТЬ ГЕОКОДУВАННЯ NOMINATIM ---
     function cleanAndNormalizeQuery(raw) {
       let clean = raw.trim();
-      clean = clean.replace(/^(вул\.|вулиця|просп\.|проспект|бул\.|бульвар|пров\.|провулок)\s+/i, '').trim();
+      clean = clean.replace(/^(вул\.|вулиця|просп\.|проспект|бул\.|бульвар|пров\.|провулок|площа)\s+/i, '').trim();
       
       const hasCherkasy = /черкас/i.test(clean);
       if (!hasCherkasy) {
@@ -1929,36 +2228,43 @@
       const mapPanel = document.getElementById('map-panel');
       const resultsPanel = document.getElementById('results-panel');
 
+      const addressCard = document.getElementById('address-input-card');
+
       [btnAddr, btnMap, btnRoute].forEach(btn => {
         btn.classList.remove('text-brand-600', 'dark:text-brand-400', 'font-black');
-        btn.classList.add('text-slate-500', 'dark:text-slate-400', 'font-bold');
+        btn.classList.add('text-slate-500', 'dark:text-slate-400', 'font-medium');
       });
 
       if (tab === 'addresses') {
         btnAddr.classList.add('text-brand-600', 'dark:text-brand-400', 'font-black');
-        btnAddr.classList.remove('text-slate-500', 'dark:text-slate-400');
+        btnAddr.classList.remove('text-slate-500', 'dark:text-slate-400', 'font-medium');
 
         sidebarPanel.classList.remove('hidden');
-        sidebarPanel.querySelector('div:first-child')?.classList.remove('hidden');
+        if (addressCard) addressCard.classList.remove('hidden');
         mapPanel.classList.add('hidden');
         resultsPanel.classList.add('hidden');
       } else if (tab === 'map') {
         btnMap.classList.add('text-brand-600', 'dark:text-brand-400', 'font-black');
-        btnMap.classList.remove('text-slate-500', 'dark:text-slate-400');
+        btnMap.classList.remove('text-slate-500', 'dark:text-slate-400', 'font-medium');
 
         mapPanel.classList.remove('hidden');
         mapPanel.classList.add('flex');
         sidebarPanel.classList.add('hidden');
 
         setTimeout(() => {
-          if (state.map) state.map.invalidateSize();
-        }, 120);
+          if (state.map) {
+            state.map.invalidateSize();
+            if (state.routeLayer) {
+              state.map.fitBounds(state.routeLayer.getBounds(), { padding: [30, 30] });
+            }
+          }
+        }, 150);
       } else if (tab === 'route') {
         btnRoute.classList.add('text-brand-600', 'dark:text-brand-400', 'font-black');
-        btnRoute.classList.remove('text-slate-500', 'dark:text-slate-400');
+        btnRoute.classList.remove('text-slate-500', 'dark:text-slate-400', 'font-medium');
 
         sidebarPanel.classList.remove('hidden');
-        sidebarPanel.querySelector('div:first-child')?.classList.add('hidden');
+        if (addressCard) addressCard.classList.add('hidden');
         mapPanel.classList.add('hidden');
         resultsPanel.classList.remove('hidden');
 
@@ -1967,6 +2273,18 @@
         }
       }
     }
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) {
+        document.getElementById('sidebar-panel')?.classList.remove('hidden');
+        document.getElementById('address-input-card')?.classList.remove('hidden');
+        document.getElementById('map-panel')?.classList.remove('hidden');
+        if (state.optimizedResult) {
+          document.getElementById('results-panel')?.classList.remove('hidden');
+        }
+        if (state.map) state.map.invalidateSize();
+      }
+    });
 
     function initEventListeners() {
       document.getElementById('mobile-nav-addresses').addEventListener('click', () => setMobileTab('addresses'));
