@@ -2,32 +2,18 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <meta name="color-scheme" content="light dark" />
-  <meta name="theme-color" content="#0b0f19" media="(prefers-color-scheme: dark)" />
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#0b1326" />
   <title>ЧеркасиRoute — Оптимізатор маршрутів доставки</title>
-
-  <!-- Скрипт перевірки збереженої теми (запобігає мерехтінню) -->
-  <script>
-    (function() {
-      const savedTheme = localStorage.getItem('cherkasy_route_theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    })();
-  </script>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           colors: {
@@ -57,12 +43,18 @@
 
   <style>
     :root {
-      color-scheme: light dark;
+      color-scheme: dark;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-tap-highlight-color: transparent;
+      background-color: #0b1326 !important;
+      color: #ffffff !important;
     }
 
     /* Запобігання авто-зуму на iOS Safari */
@@ -87,198 +79,114 @@
       scrollbar-width: none;
     }
 
-    /* ================= 100% ГАРАНТОВАНИЙ ТЕМНИЙ РЕЖИМ (ВИПРАВЛЕННЯ ТЕКСТУ ВУЛИЦЬ) ================= */
-    html.dark {
-      color-scheme: dark !important;
-    }
-    html:not(.dark) {
-      color-scheme: light !important;
-    }
-
-    html.dark, html.dark body {
-      background-color: #0b0f19 !important;
-      color: #ffffff !important;
-    }
-
-    /* ЖОРСТКО ЗАФІКСОВАНА ЧИТАБЕЛЬНІСТЬ ТЕКСТУ ПРИ ВВЕДЕННІ ВУЛИЦЬ НА БУДЬ-ЯКОМУ ТЕЛЕФОНІ */
-    html.dark input,
-    html.dark textarea,
-    html.dark select,
-    html.dark .street-input,
-    html.dark .bulk-input-text,
-    .dark input,
-    .dark textarea,
-    .dark .street-input,
-    .dark .bulk-input-text {
+    /* ================= ЄДИНА ВОДІЙСЬКА ГАМА (НЕ СЛІПИТЬ ВНОЧІ, 100% ВИДНО ВДЕНЬ) ================= */
+    input, textarea, select, .street-input, .bulk-input-text {
       color: #ffffff !important;
       -webkit-text-fill-color: #ffffff !important;
-      background-color: #1e293b !important;
-      border-color: #475569 !important;
       caret-color: #38bdf8 !important;
+      font-weight: 700 !important;
     }
 
-    /* Плейсхолдер у темній темі - високий контраст */
-    html.dark input::placeholder,
-    html.dark textarea::placeholder,
-    html.dark .street-input::placeholder,
-    .dark input::placeholder,
-    .dark textarea::placeholder,
-    .dark .street-input::placeholder {
-      color: #94a3b8 !important;
-      -webkit-text-fill-color: #94a3b8 !important;
-      opacity: 1 !important;
-    }
-
-    /* КРИТИЧНО ДЛЯ СМАРТФОНІВ (ANDROID CHROME ТА IOS SAFARI): ВИПРАВЛЕННЯ ЧОРНОГО ТЕКСТУ АВТОЗАПОВНЕННЯ */
-    html.dark input:-webkit-autofill,
-    html.dark input:-webkit-autofill:hover, 
-    html.dark input:-webkit-autofill:focus,
-    html.dark input:-webkit-autofill:active,
-    html.dark textarea:-webkit-autofill,
-    html.dark textarea:-webkit-autofill:hover,
-    html.dark textarea:-webkit-autofill:focus,
-    .dark input:-webkit-autofill,
-    .dark textarea:-webkit-autofill {
+    .street-input {
+      font-size: 16px !important;
+      background-color: #0d1627 !important;
+      border: 1.5px solid #283a57 !important;
+      color: #ffffff !important;
       -webkit-text-fill-color: #ffffff !important;
-      -webkit-box-shadow: 0 0 0px 1000px #1e293b inset !important;
-      box-shadow: 0 0 0px 1000px #1e293b inset !important;
+      border-radius: 0.75rem;
+      padding: 0.55rem 0.75rem;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .street-input:focus {
+      border-color: #38bdf8 !important;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
+      outline: none;
+    }
+
+    input::placeholder, textarea::placeholder, .street-input::placeholder {
+      color: #8da2c0 !important;
+      -webkit-text-fill-color: #8da2c0 !important;
+      opacity: 1 !important;
+      font-weight: 500;
+    }
+
+    /* Гарантований захист від білого фону автозаповнення на Android Chrome та iOS Safari */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active,
+    textarea:-webkit-autofill,
+    textarea:-webkit-autofill:hover,
+    textarea:-webkit-autofill:focus {
+      -webkit-text-fill-color: #ffffff !important;
+      -webkit-box-shadow: 0 0 0px 1000px #0d1627 inset !important;
+      box-shadow: 0 0 0px 1000px #0d1627 inset !important;
       transition: background-color 5000s ease-in-out 0s !important;
       color: #ffffff !important;
     }
 
-    /* Світлий режим для полів */
-    html:not(.dark) .street-input,
-    html:not(.dark) input[type="text"],
-    html:not(.dark) textarea {
-      color: #0f172a !important;
-      -webkit-text-fill-color: #0f172a !important;
-      caret-color: #4f46e5 !important;
-    }
-
-    /* СТИЛІ КАРТОЧКИ ВВЕДЕННЯ АДРЕСИ (ADDRESS ITEM CARD) */
+    /* Картки введення адрес */
     .address-item-card {
+      background-color: #15223a !important;
+      border: 1.5px solid #283c5e !important;
+      border-radius: 1rem;
       transition: all 0.2s ease;
     }
-    html.dark .address-item-card {
-      background-color: #1e293b !important;
-      border-color: #334155 !important;
-    }
-    html:not(.dark) .address-item-card {
-      background-color: #ffffff !important;
-      border-color: #cbd5e1 !important;
-    }
-    html.dark .address-item-card:focus-within {
-      border-color: #6366f1 !important;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.35) !important;
-    }
-    html:not(.dark) .address-item-card:focus-within {
+    .address-item-card:focus-within {
       border-color: #4f46e5 !important;
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2) !important;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3) !important;
     }
 
-    /* КАСТОМНИЙ DROPDOWN АВТОДОПОВНЕННЯ ВУЛИЦЬ ЧЕРКАС (ВИСОКИЙ КОНТРАСТ НА МОБІЛЬНИХ) */
+    /* Кастомний Dropdown автодоповнення вулиць */
     .autocomplete-dropdown {
-      background-color: #ffffff !important;
-      border: 1.5px solid #cbd5e1 !important;
-    }
-    html.dark .autocomplete-dropdown,
-    .dark .autocomplete-dropdown {
-      background-color: #0f172a !important;
-      border: 1.5px solid #334155 !important;
+      background-color: #101a2d !important;
+      border: 1.5px solid #2d4263 !important;
       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.8), 0 8px 10px -6px rgba(0, 0, 0, 0.8) !important;
     }
     .autocomplete-dropdown button {
-      min-height: 42px;
-    }
-    html.dark .autocomplete-dropdown button,
-    .dark .autocomplete-dropdown button {
+      min-height: 44px;
       color: #ffffff !important;
       -webkit-text-fill-color: #ffffff !important;
-      background-color: transparent;
+      border-bottom: 1px solid #1c2b45;
     }
-    html.dark .autocomplete-dropdown button:hover,
-    html.dark .autocomplete-dropdown button:active,
-    .dark .autocomplete-dropdown button:hover,
-    .dark .autocomplete-dropdown button:active {
-      background-color: #1e293b !important;
+    .autocomplete-dropdown button:hover,
+    .autocomplete-dropdown button:active {
+      background-color: #1b2c48 !important;
     }
 
-    /* Додатковий захист: системна темна тема у разі відсутності класу */
-    @media (prefers-color-scheme: dark) {
-      html:not(.light) .street-input,
-      html:not(.light) input,
-      html:not(.light) textarea {
-        color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
-        caret-color: #38bdf8 !important;
-      }
-      html:not(.light) input:-webkit-autofill,
-      html:not(.light) textarea:-webkit-autofill {
-        -webkit-text-fill-color: #ffffff !important;
-        -webkit-box-shadow: 0 0 0px 1000px #1e293b inset !important;
-      }
-    }
-
-    /* Фонове заповнення та межі контейнерів у темній темі */
-    html.dark .bg-white {
-      background-color: #111827 !important;
+    /* Зупинки у маршрутному листі */
+    .stop-card-inner {
+      background-color: #142036 !important;
+      border: 1.5px solid #273956 !important;
       color: #ffffff !important;
-      border-color: #1f2937 !important;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    html.dark .bg-slate-50,
-    html.dark .bg-slate-100 {
-      background-color: #1e293b !important;
-      color: #ffffff !important;
+    .stop-card-inner:hover {
+      border-color: #3b82f6 !important;
     }
-    html.dark .text-slate-900,
-    html.dark .text-slate-800,
-    html.dark .text-slate-700 {
-      color: #ffffff !important;
-    }
-    html.dark .text-slate-500,
-    html.dark .text-slate-600 {
-      color: #cbd5e1 !important;
-    }
-    html.dark .border-slate-100,
-    html.dark .border-slate-200,
-    html.dark .border-slate-300 {
-      border-color: #334155 !important;
-    }
-    html.dark .chip-hub {
-      background-color: #1e293b !important;
-      color: #f1f5f9 !important;
-      border-color: #475569 !important;
-    }
-    html.dark .chip-hub:hover,
-    html.dark .chip-hub:active {
-      background-color: #334155 !important;
-      color: #ffffff !important;
-    }
-    html.dark .stop-card-inner {
-      background-color: #1e293b !important;
-      border-color: #334155 !important;
-    }
-    html.dark .stop-title {
+    .stop-title {
       color: #ffffff !important;
       -webkit-text-fill-color: #ffffff !important;
+      font-weight: 800 !important;
     }
 
-    /* Нічний режим для карти OpenStreetMap */
-    .dark .leaflet-tile-pane {
-      filter: invert(100%) hue-rotate(180deg) brightness(88%) contrast(92%);
+    /* Збалансований водійський контраст карти OSM: прибирає сліпуче біле свічення, насичує дороги */
+    .leaflet-tile-pane {
+      filter: brightness(90%) contrast(106%) saturate(110%);
     }
 
-    .dark .leaflet-popup-content-wrapper {
-      background: #0f172a !important;
+    .leaflet-popup-content-wrapper {
+      background: #101a2d !important;
       color: #ffffff !important;
-      border: 1.5px solid #334155;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+      border: 1.5px solid #2f4365 !important;
+      border-radius: 1rem !important;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.7) !important;
     }
-    .dark .leaflet-popup-tip {
-      background: #0f172a !important;
+    .leaflet-popup-tip {
+      background: #101a2d !important;
     }
-    .dark .leaflet-container {
-      background: #020617;
+    .leaflet-container {
+      background: #0b1326 !important;
     }
 
     /* Маркери */
@@ -289,7 +197,7 @@
       border-radius: 9999px;
       font-weight: 900;
       color: #ffffff;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
       border: 2.5px solid #ffffff;
       transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
       cursor: grab;
@@ -301,21 +209,21 @@
     .custom-marker-pin:hover, .custom-marker-pin.active {
       transform: scale(1.28);
       z-index: 1000 !important;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
     }
     .marker-start {
       background: linear-gradient(135deg, #10b981, #059669);
     }
     .marker-stop {
-      background: linear-gradient(135deg, #4f46e5, #3b82f6);
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     }
     .marker-finish {
-      background: linear-gradient(135deg, #ef4444, #dc2626);
+      background: linear-gradient(135deg, #f43f5e, #be123c);
     }
     .marker-completed {
-      background: linear-gradient(135deg, #475569, #334155) !important;
+      background: linear-gradient(135deg, #334155, #1e293b) !important;
       opacity: 0.75;
-      border-color: #94a3b8;
+      border-color: #64748b;
     }
 
     /* Пульсація */
@@ -342,7 +250,7 @@
       right: -10px;
       bottom: -10px;
       border-radius: 9999px;
-      border: 3px solid rgba(59, 130, 246, 0.8);
+      border: 3px solid rgba(56, 189, 248, 0.85);
       animation: pulseGps 1.8s infinite ease-out;
       pointer-events: none;
     }
@@ -360,11 +268,8 @@
       background: transparent;
     }
     ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
+      background: #2b3e5e;
       border-radius: 6px;
-    }
-    .dark ::-webkit-scrollbar-thumb {
-      background: #475569;
     }
 
     /* Друк */
@@ -390,15 +295,15 @@
     }
   </style>
 </head>
-<body class="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-white min-h-screen flex flex-col antialiased transition-colors duration-200">
+<body class="bg-[#0b1326] text-white min-h-screen flex flex-col antialiased">
 
   <!-- ==================== ШАПКА ДОДАТКУ (HEADER) ==================== -->
-  <header class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-40 shadow-xs no-print pt-safe transition-colors">
+  <header class="bg-[#0e172c]/95 backdrop-blur-md border-b border-[#1f2f4c] sticky top-0 z-40 shadow-lg no-print pt-safe">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-15 sm:h-16 flex items-center justify-between">
       
       <!-- Логотип та Назва -->
       <div class="flex items-center space-x-2.5">
-        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-brand-500/30 flex-shrink-0">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-sky-500 flex items-center justify-center text-white shadow-md shadow-brand-500/30 flex-shrink-0">
           <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
@@ -406,52 +311,39 @@
         </div>
         <div>
           <div class="flex items-center space-x-1.5">
-            <h1 class="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">Черкаси<span class="text-brand-600 dark:text-brand-400">Route</span></h1>
-            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
-              OSM PRO v3.2
+            <h1 class="text-base sm:text-lg font-black text-white tracking-tight">Черкаси<span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-sky-400 to-cyan-300">Route</span></h1>
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-950 text-emerald-300 border border-emerald-600/60 shadow-xs">
+              OSM PRO v3.3
             </span>
           </div>
-          <p class="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">Оптимізатор маршрутів доставки м. Черкаси</p>
+          <p class="text-[11px] text-slate-400 hidden sm:block">Оптимізатор маршрутів доставки м. Черкаси</p>
         </div>
       </div>
 
-      <!-- Верхні дії + Кнопка перемикання теми -->
+      <!-- Верхні дії (Єдина гама, без темної кнопки) -->
       <div class="flex items-center space-x-1.5 sm:space-x-2">
         
-        <!-- КНОПКА ТЕМНОЇ ТЕМИ -->
-        <button id="btn-toggle-theme" 
-                class="p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-amber-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition active:scale-95 flex items-center gap-1.5 shadow-xs"
-                title="Перемкнути нічну тему">
-          <svg id="theme-icon-moon" class="w-4 h-4 hidden dark:inline text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-          </svg>
-          <svg id="theme-icon-sun" class="w-4 h-4 inline dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-          </svg>
-          <span class="text-xs font-black hidden sm:inline text-slate-800 dark:text-white" id="theme-text">Ніч</span>
-        </button>
-
         <button id="btn-load-demo" 
-                class="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 border border-slate-300 dark:border-slate-700 shadow-xs text-xs sm:text-sm font-bold rounded-xl text-slate-800 dark:text-white bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-brand-600 focus:outline-none transition active:scale-95">
-          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                class="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 border border-[#2b3e5e] shadow-xs text-xs sm:text-sm font-bold rounded-xl text-amber-300 bg-[#16233b] hover:bg-[#1d2d4c] hover:border-amber-500/50 focus:outline-none transition active:scale-95">
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
           </svg>
           <span class="hidden xs:inline">Зразок</span>
           <span class="xs:hidden">Тест</span>
         </button>
 
         <button id="btn-reset-all" 
-                class="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 border border-slate-300 dark:border-slate-700 shadow-xs text-xs sm:text-sm font-bold rounded-xl text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 focus:outline-none transition active:scale-95">
-          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 border border-[#2b3e5e] shadow-xs text-xs sm:text-sm font-bold rounded-xl text-slate-300 bg-[#16233b] hover:bg-rose-950/50 hover:border-rose-500/50 hover:text-rose-300 focus:outline-none transition active:scale-95">
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
           </svg>
           <span class="hidden sm:inline">Очистити</span>
         </button>
 
         <button id="btn-open-help" 
-                class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition active:scale-95"
+                class="p-2 rounded-xl text-slate-300 hover:text-white bg-[#16233b] border border-[#2b3e5e] hover:bg-[#1d2d4c] transition active:scale-95"
                 title="Довідка">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </button>
@@ -469,56 +361,56 @@
       <section id="sidebar-panel" class="lg:col-span-5 flex flex-col space-y-4 w-full">
         
         <!-- Карточка: Введення адрес -->
-        <div id="address-input-card" class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-3 sm:p-5 transition">
+        <div id="address-input-card" class="bg-[#121d33] rounded-2xl shadow-xl border border-[#243552] p-3 sm:p-5 transition">
           
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-3">
+          <div class="flex items-center justify-between pb-3 border-b border-[#1f2f4c] mb-3">
             <div class="flex items-center space-x-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-brand-600 dark:bg-brand-400 animate-pulse"></span>
-              <h2 class="text-sm sm:text-base font-black text-slate-900 dark:text-white">Адреси доставки</h2>
+              <span class="w-2.5 h-2.5 rounded-full bg-sky-400 animate-pulse"></span>
+              <h2 class="text-sm sm:text-base font-black text-white">Адреси доставки</h2>
             </div>
             
             <!-- Перемикач режиму введення (Список / Текст) -->
-            <div class="inline-flex rounded-xl bg-slate-100 dark:bg-slate-800 p-0.5 text-xs font-semibold">
-              <button id="mode-fields-btn" class="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-700 shadow-xs text-brand-700 dark:text-brand-300 font-bold transition">
+            <div class="inline-flex rounded-xl bg-[#0e172a] border border-[#243552] p-0.5 text-xs font-bold">
+              <button id="mode-fields-btn" class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white shadow-xs font-black transition">
                 Полями
               </button>
-              <button id="mode-bulk-btn" class="px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium transition">
+              <button id="mode-bulk-btn" class="px-2.5 py-1 rounded-lg text-slate-300 hover:text-white font-medium transition">
                 Текстом
               </button>
             </div>
           </div>
 
-          <!-- Швидкі чіпи популярних хабів Черкас (Горизонтальний свайп на смартфонах) -->
+          <!-- Швидкі чіпи популярних хабів Черкас (Різнокольорова гама для швидкого розпізнавання) -->
           <div class="mb-3">
             <div class="flex items-center justify-between mb-1.5">
-              <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
                 Швидкі локації (1 клік):
               </span>
-              <span class="text-[10px] text-slate-400 dark:text-slate-500 sm:hidden">гортайте ➔</span>
+              <span class="text-[10px] text-slate-500 sm:hidden">гортайте ➔</span>
             </div>
             <div class="flex gap-1.5 overflow-x-auto pb-1 pt-0.5 no-scrollbar sm:flex-wrap" id="quick-hubs-chips">
-              <button type="button" data-addr="бул. Шевченка, 208" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="бул. Шевченка, 208" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-xl bg-amber-950/50 hover:bg-amber-900/70 text-amber-300 border border-amber-600/50 transition font-bold active:scale-95 shadow-xs">
                 🏢 ТРЦ Любава
               </button>
-              <button type="button" data-addr="просп. Перемоги, 29" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="просп. Перемоги, 29" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-xl bg-emerald-950/50 hover:bg-emerald-900/70 text-emerald-300 border border-emerald-600/50 transition font-bold active:scale-95 shadow-xs">
                 🛒 Епіцентр
               </button>
-              <button type="button" data-addr="вул. Смілянська, 2" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="вул. Смілянська, 2" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-xl bg-cyan-950/50 hover:bg-cyan-900/70 text-cyan-300 border border-cyan-600/50 transition font-bold active:scale-95 shadow-xs">
                 🏬 Центр. ринок
               </button>
-              <button type="button" data-addr="вул. Припортова, 34" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="вул. Припортова, 34" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-xl bg-indigo-950/50 hover:bg-indigo-900/70 text-indigo-300 border border-indigo-600/50 transition font-bold active:scale-95 shadow-xs">
                 🛍️ Дніпро-Плаза
               </button>
-              <button type="button" data-addr="вул. Хоменка, 15" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="вул. Хоменка, 15" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-xl bg-rose-950/50 hover:bg-rose-900/70 text-rose-300 border border-rose-600/50 transition font-bold active:scale-95 shadow-xs">
                 📦 Нова Пошта №1
               </button>
-              <button type="button" data-addr="вул. Володимира Ложешнікова, 1" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="вул. Володимира Ложешнікова, 1" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-xl bg-sky-950/50 hover:bg-sky-900/70 text-sky-300 border border-sky-600/50 transition font-bold active:scale-95 shadow-xs">
                 🚆 Вокзал
               </button>
-              <button type="button" data-addr="вул. Сумгаїтська, 10" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="вул. Сумгаїтська, 10" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-xl bg-purple-950/50 hover:bg-purple-900/70 text-purple-300 border border-purple-600/50 transition font-bold active:scale-95 shadow-xs">
                 🏘️ ПЗР
               </button>
-              <button type="button" data-addr="вул. Героїв Дніпра, 23" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="вул. Героїв Дніпра, 23" class="chip-hub flex-shrink-0 px-2.5 py-1 text-xs rounded-xl bg-teal-950/50 hover:bg-teal-900/70 text-teal-300 border border-teal-600/50 transition font-bold active:scale-95 shadow-xs">
                 ⛵ Митниця
               </button>
             </div>
@@ -556,7 +448,7 @@
 
             <div class="flex items-center space-x-2 pt-1.5">
               <button id="btn-add-field" type="button" 
-                      class="flex-1 inline-flex items-center justify-center py-3 px-3 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-xs sm:text-sm font-bold text-brand-600 dark:text-brand-400 bg-brand-50/50 dark:bg-slate-800/80 hover:bg-brand-50 dark:hover:bg-slate-800 hover:border-brand-400 focus:outline-none transition active:scale-98">
+                      class="flex-1 inline-flex items-center justify-center py-3 px-3 border border-dashed border-[#3a5075] rounded-xl text-xs sm:text-sm font-bold text-sky-400 bg-[#132037] hover:bg-[#1a2b49] hover:border-sky-400 focus:outline-none transition active:scale-98">
                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -564,9 +456,9 @@
               </button>
 
               <button id="btn-use-geolocation" type="button" 
-                      class="inline-flex items-center py-3 px-3 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none transition active:scale-95 shadow-xs"
+                      class="inline-flex items-center py-3 px-3 border border-emerald-600/50 rounded-xl text-xs font-black text-emerald-300 bg-emerald-950/60 hover:bg-emerald-900/70 focus:outline-none transition active:scale-95 shadow-xs"
                       title="Визначити точне супутникове GPS місцезнаходження">
-                <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 mr-1 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-emerald-400 mr-1 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
@@ -577,29 +469,29 @@
 
           <!-- РЕЖИМ 2: Масове текстове введення (Textarea) -->
           <div id="bulk-mode-container" class="hidden space-y-3">
-            <p class="text-xs text-slate-600 dark:text-slate-300 font-medium">
+            <p class="text-xs text-slate-300 font-medium">
               Вставте адреси списком (по одній у рядку). Дописувати "Черкаси" не обов'язково:
             </p>
             <textarea id="bulk-textarea" rows="7" 
-                      class="bulk-input-text w-full text-sm sm:text-base rounded-xl border border-slate-300 dark:border-slate-700 shadow-inner focus:border-brand-500 focus:ring-2 focus:ring-brand-500 p-3 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 font-bold dark:caret-brand-400"
+                      class="bulk-input-text w-full text-sm sm:text-base rounded-xl border border-[#2b3e5e] shadow-inner focus:border-sky-400 focus:ring-2 focus:ring-sky-400/30 p-3 bg-[#0d1627] text-white placeholder-slate-400 font-bold caret-sky-400"
                       placeholder="бул. Шевченка, 185&#10;вул. Смілянська, 2&#10;вул. Хрещатик, 223&#10;вул. Сумгаїтська, 10"></textarea>
             <button id="btn-import-bulk" type="button" 
-                    class="w-full py-3 bg-slate-900 dark:bg-brand-600 hover:bg-black dark:hover:bg-brand-700 text-white text-xs sm:text-sm font-bold rounded-xl transition shadow-sm active:scale-98">
+                    class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold rounded-xl transition shadow-md active:scale-98">
               Застосувати список адрес
             </button>
           </div>
 
           <!-- Опції маршрутизатора -->
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
-            <label class="flex items-center space-x-2.5 text-xs sm:text-sm text-slate-800 dark:text-slate-200 cursor-pointer select-none font-medium">
+          <div class="mt-4 pt-3 border-t border-[#1f2f4c] space-y-2">
+            <label class="flex items-center space-x-2.5 text-xs sm:text-sm text-slate-200 cursor-pointer select-none font-medium">
               <input id="opt-start-first" type="checkbox" checked 
-                     class="w-4 h-4 text-brand-600 rounded border-slate-300 dark:border-slate-600 focus:ring-brand-500 cursor-pointer">
+                     class="w-4 h-4 text-indigo-600 rounded border-slate-600 bg-[#0e172a] focus:ring-indigo-500 cursor-pointer">
               <span><strong>Фіксований старт:</strong> перша адреса — це депо/склад/початок зміни</span>
             </label>
 
-            <label class="flex items-center space-x-2.5 text-xs sm:text-sm text-slate-800 dark:text-slate-200 cursor-pointer select-none font-medium">
+            <label class="flex items-center space-x-2.5 text-xs sm:text-sm text-slate-200 cursor-pointer select-none font-medium">
               <input id="opt-roundtrip" type="checkbox" 
-                     class="w-4 h-4 text-brand-600 rounded border-slate-300 dark:border-slate-600 focus:ring-brand-500 cursor-pointer">
+                     class="w-4 h-4 text-indigo-600 rounded border-slate-600 bg-[#0e172a] focus:ring-indigo-500 cursor-pointer">
               <span><strong>Круговий маршрут:</strong> повернутися на старт наприкінці</span>
             </label>
           </div>
@@ -607,7 +499,7 @@
           <!-- Головна кнопка запуску оптимізації -->
           <div class="mt-4">
             <button id="btn-optimize-route" type="button" 
-                    class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-brand-600 via-indigo-600 to-blue-600 hover:from-brand-700 hover:to-blue-700 text-white font-black text-sm sm:text-base shadow-lg shadow-brand-500/30 hover:shadow-brand-500/50 focus:outline-none transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-98">
+                    class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-black text-sm sm:text-base shadow-lg shadow-indigo-950/60 hover:shadow-cyan-950/80 focus:outline-none transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-98">
               <svg id="btn-icon-calc" class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
               </svg>
@@ -621,15 +513,15 @@
           </div>
 
           <!-- Прогрес-бар геокодування через Nominatim -->
-          <div id="progress-container" class="hidden mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-            <div class="flex items-center justify-between text-xs text-slate-700 dark:text-slate-300 mb-1.5 font-bold">
+          <div id="progress-container" class="hidden mt-4 pt-3 border-t border-[#1f2f4c]">
+            <div class="flex items-center justify-between text-xs text-slate-300 mb-1.5 font-bold">
               <span id="progress-status-text">Пошук координат у Черкасах...</span>
-              <span id="progress-percent" class="font-extrabold text-brand-600 dark:text-brand-400">0%</span>
+              <span id="progress-percent" class="font-extrabold text-sky-400">0%</span>
             </div>
-            <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2.5 overflow-hidden">
-              <div id="progress-bar-fill" class="bg-gradient-to-r from-brand-600 to-emerald-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            <div class="w-full bg-[#0e172a] rounded-full h-2.5 overflow-hidden border border-[#1f304f]">
+              <div id="progress-bar-fill" class="bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-400 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
             </div>
-            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5 flex items-center">
+            <p class="text-[11px] text-slate-400 mt-1.5 flex items-center">
               <svg class="w-3.5 h-3.5 mr-1 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -640,82 +532,82 @@
         </div>
 
         <!-- ==================== КАРТОЧКА: РЕЗУЛЬТАТИ ТА МАРШРУТНИЙ ЛИСТ ==================== -->
-        <div id="results-panel" class="hidden bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-3.5 sm:p-5 transition">
+        <div id="results-panel" class="hidden bg-[#121d33] rounded-2xl shadow-xl border border-[#243552] p-3.5 sm:p-5 transition">
           
           <div id="print-section">
             <!-- Заголовок результатів -->
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-3">
+            <div class="flex items-center justify-between pb-3 border-b border-[#1f2f4c] mb-3">
               <div>
-                <h2 class="text-base font-bold text-slate-900 dark:text-white">Оптимальний маршрут</h2>
-                <p class="text-xs text-slate-500 dark:text-slate-400">Послідовність об'їзду (Задача комівояжера)</p>
+                <h2 class="text-base font-black text-white">Оптимальний маршрут</h2>
+                <p class="text-xs text-slate-400">Послідовність об'їзду (Задача комівояжера)</p>
               </div>
-              <span id="badge-stops-count" class="px-2.5 py-1 rounded-full bg-brand-100 dark:bg-brand-950 text-brand-800 dark:text-brand-300 text-xs font-bold border border-brand-200 dark:border-brand-800">
+              <span id="badge-stops-count" class="px-2.5 py-1 rounded-full bg-indigo-950 text-indigo-300 text-xs font-black border border-indigo-700/60 shadow-xs">
                 0 точок
               </span>
             </div>
 
             <!-- Зведені показники (Статистика) -->
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
-              <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-2.5 border border-slate-200 dark:border-slate-700 text-center">
-                <span class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold block">Відстань</span>
-                <span id="stat-distance" class="text-base sm:text-lg font-black text-slate-900 dark:text-white">0 км</span>
+              <div class="bg-[#15223a] rounded-xl p-2.5 border border-[#2b3e5e] text-center shadow-xs">
+                <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold block">Відстань</span>
+                <span id="stat-distance" class="text-base sm:text-lg font-black text-sky-400">0 км</span>
               </div>
-              <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-2.5 border border-slate-200 dark:border-slate-700 text-center">
-                <span class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold block">Час у дорозі</span>
-                <span id="stat-duration" class="text-base sm:text-lg font-black text-brand-600 dark:text-brand-400">~ 0 хв</span>
+              <div class="bg-[#15223a] rounded-xl p-2.5 border border-[#2b3e5e] text-center shadow-xs">
+                <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold block">Час у дорозі</span>
+                <span id="stat-duration" class="text-base sm:text-lg font-black text-indigo-400">~ 0 хв</span>
               </div>
-              <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-2.5 border border-slate-200 dark:border-slate-700 text-center col-span-2 sm:col-span-1">
-                <span class="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold block">Оптимізація</span>
-                <span class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">TSP OSRM</span>
+              <div class="bg-[#15223a] rounded-xl p-2.5 border border-[#2b3e5e] text-center col-span-2 sm:col-span-1 shadow-xs">
+                <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold block">Оптимізація</span>
+                <span class="text-base sm:text-lg font-black text-emerald-400">TSP OSRM</span>
               </div>
             </div>
 
             <!-- Індикатор прогресу виконання доставок кур'єром -->
-            <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 border border-slate-200 dark:border-slate-700 mb-3 no-print">
-              <div class="flex items-center justify-between text-xs mb-1.5 font-bold text-slate-800 dark:text-slate-200">
+            <div class="bg-[#15223a] rounded-xl p-3 border border-[#2b3e5e] mb-3 no-print">
+              <div class="flex items-center justify-between text-xs mb-1.5 font-bold text-slate-200">
                 <span class="flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                   <span>Виконано замовлень:</span>
                 </span>
-                <span id="delivery-progress-text" class="text-brand-700 dark:text-brand-300 font-extrabold">0 з 0 (0%)</span>
+                <span id="delivery-progress-text" class="text-sky-300 font-extrabold">0 з 0 (0%)</span>
               </div>
-              <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
-                <div id="delivery-progress-bar" class="bg-emerald-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+              <div class="w-full bg-[#0e172a] rounded-full h-2 overflow-hidden border border-[#1f304f]">
+                <div id="delivery-progress-bar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
               </div>
             </div>
 
             <!-- Швидкі дії з маршрутом для водія -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 no-print">
               <button id="btn-open-google-maps" type="button" 
-                      class="inline-flex items-center justify-center gap-1.5 px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-xs transition active:scale-95">
-                <svg class="w-4 h-4 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                      class="inline-flex items-center justify-center gap-1.5 px-3 py-2 border border-[#2b3e5e] rounded-xl text-xs font-bold text-blue-300 bg-[#15223a] hover:bg-[#1c2c48] shadow-xs transition active:scale-95">
+                <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                 </svg>
                 <span>Google Maps</span>
               </button>
 
               <button id="btn-export-gpx" type="button" 
-                      class="inline-flex items-center justify-center gap-1 px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-xs transition active:scale-95"
+                      class="inline-flex items-center justify-center gap-1 px-3 py-2 border border-[#2b3e5e] rounded-xl text-xs font-bold text-emerald-300 bg-[#15223a] hover:bg-[#1c2c48] shadow-xs transition active:scale-95"
                       title="Завантажити трек GPX для OsmAnd або Garmin">
-                <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
                 <span>Файл GPX</span>
               </button>
 
               <button id="btn-copy-route-text" type="button" 
-                      class="inline-flex items-center justify-center gap-1 px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-xs transition active:scale-95"
+                      class="inline-flex items-center justify-center gap-1 px-3 py-2 border border-[#2b3e5e] rounded-xl text-xs font-bold text-slate-200 bg-[#15223a] hover:bg-[#1c2c48] shadow-xs transition active:scale-95"
                       title="Скопіювати маршрутний лист у буфер обміну">
-                <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
                 <span>Копіювати</span>
               </button>
 
               <button id="btn-print-route" type="button" 
-                      class="inline-flex items-center justify-center gap-1 px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-xs transition active:scale-95"
+                      class="inline-flex items-center justify-center gap-1 px-3 py-2 border border-[#2b3e5e] rounded-xl text-xs font-bold text-slate-200 bg-[#15223a] hover:bg-[#1c2c48] shadow-xs transition active:scale-95"
                       title="Роздрукувати маршрутний лист">
-                <svg class="w-4 h-4 text-slate-500 dark:text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                 </svg>
                 <span>Друк</span>
@@ -735,14 +627,14 @@
       <!-- ПРАВА КОЛОНКА: Інтерактивна карта OpenStreetMap (7 колонок) -->
       <section id="map-panel" class="lg:col-span-7 flex flex-col h-[calc(100dvh-155px)] min-h-[460px] lg:h-[calc(100vh-100px)] lg:sticky lg:top-20 w-full">
         
-        <div id="map-card-container" class="relative w-full h-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 flex flex-col transition">
+        <div id="map-card-container" class="relative w-full h-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-[#243552] bg-[#0e172a] flex flex-col transition">
           
           <!-- Контейнер карти Leaflet (OpenStreetMap) -->
           <div id="map" class="w-full h-full z-10"></div>
 
           <!-- Верхній бейдж OpenStreetMap на карті -->
-          <div class="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-md border border-slate-200/80 dark:border-slate-700/80 no-print text-xs font-bold text-slate-800 dark:text-white">
-            <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="currentColor">
+          <div class="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-[#0e172c]/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-lg border border-[#243552] no-print text-xs font-bold text-white">
+            <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
             </svg>
             <span>Карта OpenStreetMap (OSM)</span>
@@ -753,7 +645,7 @@
             
             <!-- Кнопка центрування на Черкасах -->
             <button id="btn-center-cherkasy" 
-                    class="p-2.5 rounded-xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-800 dark:text-slate-200 hover:text-brand-600 dark:hover:text-brand-400 shadow-md border border-slate-200 dark:border-slate-700 transition active:scale-90"
+                    class="p-2.5 rounded-xl bg-[#121d33]/95 backdrop-blur-md text-slate-200 hover:text-sky-400 shadow-lg border border-[#2b3e5e] transition active:scale-90"
                     title="Відцентрувати на Черкасах">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -762,7 +654,7 @@
 
             <!-- Кнопка вміщення всього маршруту -->
             <button id="btn-fit-route" 
-                    class="p-2.5 rounded-xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-800 dark:text-slate-200 hover:text-brand-600 dark:hover:text-brand-400 shadow-md border border-slate-200 dark:border-slate-700 transition active:scale-90"
+                    class="p-2.5 rounded-xl bg-[#121d33]/95 backdrop-blur-md text-slate-200 hover:text-sky-400 shadow-lg border border-[#2b3e5e] transition active:scale-90"
                     title="Показати весь маршрут на екрані">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
@@ -771,7 +663,7 @@
 
             <!-- Кнопка повноекранного режиму -->
             <button id="btn-fullscreen-map" 
-                    class="p-2.5 rounded-xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-800 dark:text-slate-200 hover:text-brand-600 dark:hover:text-brand-400 shadow-md border border-slate-200 dark:border-slate-700 transition active:scale-90"
+                    class="p-2.5 rounded-xl bg-[#121d33]/95 backdrop-blur-md text-slate-200 hover:text-sky-400 shadow-lg border border-[#2b3e5e] transition active:scale-90"
                     title="Розгорнути карту на весь екран">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
@@ -781,21 +673,21 @@
           </div>
 
           <!-- НИЖНЯ ПЛАВАЮЧА КАРТКА «ПОТОЧНА ДОСТАВКА» ДЛЯ ВОДІЯ НА КАРТІ -->
-          <div id="floating-next-stop-card" class="hidden absolute bottom-3 left-3 right-3 sm:left-4 sm:right-auto sm:max-w-md z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-3 sm:p-3.5 rounded-2xl border border-slate-300 dark:border-slate-700 shadow-xl transition-all">
+          <div id="floating-next-stop-card" class="hidden absolute bottom-3 left-3 right-3 sm:left-4 sm:right-auto sm:max-w-md z-20 bg-[#121d33]/95 backdrop-blur-md p-3 sm:p-3.5 rounded-2xl border border-[#2b3e5e] shadow-2xl transition-all">
             <div class="flex items-center justify-between mb-1.5">
-              <span id="floating-stop-badge" class="px-2 py-0.5 rounded-md text-[11px] font-black bg-brand-100 dark:bg-brand-950 text-brand-800 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
+              <span id="floating-stop-badge" class="px-2 py-0.5 rounded-md text-[11px] font-black bg-indigo-950 text-indigo-300 border border-indigo-700/60 shadow-xs">
                 Наступна: Зупинка №2
               </span>
-              <span id="floating-stop-eta" class="text-xs font-bold text-slate-600 dark:text-slate-300">
+              <span id="floating-stop-eta" class="text-xs font-bold text-slate-300">
                 1.4 км • ~ 4 хв
               </span>
             </div>
-            <h4 id="floating-stop-addr" class="text-sm font-black text-slate-900 dark:text-white truncate mb-2">
+            <h4 id="floating-stop-addr" class="text-sm font-black text-white truncate mb-2">
               вул. Смілянська, 2
             </h4>
             <div class="flex items-center gap-1.5">
               <a id="floating-stop-nav-btn" href="#" target="_blank" 
-                 class="flex-1 py-2 px-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl text-center flex items-center justify-center gap-1 shadow-sm transition active:scale-95">
+                 class="flex-1 py-2 px-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl text-center flex items-center justify-center gap-1 shadow-sm transition active:scale-95">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
                 <span>Google</span>
               </a>
@@ -804,15 +696,15 @@
                 <span>Waze</span>
               </a>
               <button id="floating-stop-done-btn" type="button"
-                      class="py-2 px-3 bg-emerald-50 dark:bg-emerald-950/90 hover:bg-emerald-100 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 text-xs font-black rounded-xl transition active:scale-95">
+                      class="py-2 px-3 bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-600/60 text-xs font-black rounded-xl transition active:scale-95">
                 ✓ Зроблено
               </button>
             </div>
           </div>
 
           <!-- Підказка про клік на карті -->
-          <div id="map-hint-pill" class="absolute bottom-3 left-3 z-15 hidden sm:flex items-center gap-2 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm text-xs text-slate-700 dark:text-slate-300 pointer-events-none font-medium">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <div id="map-hint-pill" class="absolute bottom-3 left-3 z-15 hidden sm:flex items-center gap-2 bg-[#0e172c]/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-[#243552] shadow-md text-xs text-slate-300 pointer-events-none font-medium">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <span>Клікніть на карті або перетягніть мітку для точного налаштування</span>
           </div>
 
@@ -825,24 +717,24 @@
   </main>
 
   <!-- ==================== ФІКСОВАНА НАВІГАЦІЯ ДЛЯ СМАРТФОНІВ (MOBILE BOTTOM BAR) ==================== -->
-  <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 pb-safe shadow-xl no-print">
+  <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0e172c]/95 backdrop-blur-md border-t border-[#1f2f4c] pb-safe shadow-2xl no-print">
     <div class="grid grid-cols-3 max-w-md mx-auto py-1 px-2">
       
       <!-- Вкладка 1: Адреси -->
       <button id="mobile-nav-addresses" type="button" 
-              class="flex flex-col items-center justify-center py-1.5 px-2 rounded-xl text-brand-600 dark:text-brand-400 transition font-bold text-xs">
+              class="flex flex-col items-center justify-center py-1.5 px-2 rounded-xl text-sky-400 transition font-black text-xs">
         <div class="relative">
           <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
-          <span id="mobile-badge-addr-count" class="absolute -top-1 -right-2.5 px-1.5 py-0.2 bg-brand-600 text-white text-[9px] rounded-full font-extrabold">3</span>
+          <span id="mobile-badge-addr-count" class="absolute -top-1 -right-2.5 px-1.5 py-0.2 bg-indigo-600 text-white text-[9px] rounded-full font-extrabold shadow-sm">3</span>
         </div>
         <span>Адреси</span>
       </button>
 
       <!-- Вкладка 2: Карта OSM -->
       <button id="mobile-nav-map" type="button" 
-              class="flex flex-col items-center justify-center py-1.5 px-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition font-medium text-xs">
+              class="flex flex-col items-center justify-center py-1.5 px-2 rounded-xl text-slate-400 hover:text-white transition font-medium text-xs">
         <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
         </svg>
@@ -851,12 +743,12 @@
 
       <!-- Вкладка 3: Маршрутний лист -->
       <button id="mobile-nav-route" type="button" 
-              class="flex flex-col items-center justify-center py-1.5 px-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition font-medium text-xs">
+              class="flex flex-col items-center justify-center py-1.5 px-2 rounded-xl text-slate-400 hover:text-white transition font-medium text-xs">
         <div class="relative">
           <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span id="mobile-badge-route-status" class="hidden absolute -top-1 -right-2 w-2 h-2 bg-emerald-500 rounded-full"></span>
+          <span id="mobile-badge-route-status" class="hidden absolute -top-1 -right-2 w-2.5 h-2.5 bg-emerald-400 rounded-full shadow-xs"></span>
         </div>
         <span>Маршрут</span>
       </button>
@@ -870,44 +762,44 @@
   </div>
 
   <!-- ==================== МОДАЛЬНЕ ВІКНО ДОВІДКИ ==================== -->
-  <div id="help-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-3 sm:p-4">
-    <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-100 dark:border-slate-800 max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
-        <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white flex items-center">
-          <svg class="w-5 h-5 text-brand-600 dark:text-brand-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <div id="help-modal" class="fixed inset-0 z-50 bg-[#060b14]/80 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-4">
+    <div class="bg-[#121d33] rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-[#283c5e] max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-[#1e2f4c] mb-4">
+        <h3 class="text-base sm:text-lg font-black text-white flex items-center">
+          <svg class="w-5 h-5 text-sky-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           Довідка ЧеркасиRoute
         </h3>
-        <button id="btn-close-help" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-xl">
+        <button id="btn-close-help" class="text-slate-400 hover:text-white p-1.5 rounded-xl">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
       </div>
 
-      <div class="space-y-3.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+      <div class="space-y-3.5 text-xs sm:text-sm text-slate-300">
         <div>
-          <h4 class="font-bold text-slate-900 dark:text-white mb-1">🌙 Нічна тема:</h4>
-          <p>Натисніть кнопку із місяцем у шапці, щоб увімкнути нічний режим. Карта та весь інтерфейс стануть темними для збереження зору в темряві.</p>
+          <h4 class="font-black text-amber-400 mb-1">🚗 Комфортна водійська гама (День / Ніч):</h4>
+          <p>Єдиний антибліковий інтерфейс із контрастним шрифтом. Вдень текст ідеально видно навіть на сонці, а вночі екран не засліплює очі водія та не відблискує на лобовому склі.</p>
         </div>
 
         <div>
-          <h4 class="font-bold text-slate-900 dark:text-white mb-1">🗺️ Точне геокодування:</h4>
-          <p>Вводьте вулицю та номер (наприклад, <code>Шевченка 185</code>). Додаток очищує зайві префікси та знаходить точний номер будинку.</p>
+          <h4 class="font-black text-sky-400 mb-1">🗺️ Точне геокодування:</h4>
+          <p>Вводьте назву вулиці та номер будинку (наприклад, <code>Шевченка 185</code>). Додаток очищує зайві префікси та знаходить точний номер будинку.</p>
         </div>
 
         <div>
-          <h4 class="font-bold text-slate-900 dark:text-white mb-1">🛰️ Точне GPS:</h4>
-          <p>Кнопка «Точне GPS» використовує супутниковий GPS-модуль із відображенням радіуса похибки у метрах.</p>
+          <h4 class="font-black text-emerald-400 mb-1">🛰️ Точне супутникове GPS:</h4>
+          <p>Кнопка «Точне GPS» калібрує супутниковий GPS-модуль із відображенням радіуса похибки у метрах.</p>
         </div>
 
         <div>
-          <h4 class="font-bold text-slate-900 dark:text-white mb-1">🚗 Навігація в дорозі:</h4>
-          <p>Натисніть кнопку <strong>«Google Maps»</strong> або <strong>«Waze»</strong> для швидкого відкриття навігатора.</p>
+          <h4 class="font-black text-indigo-400 mb-1">🚦 Навігація в дорозі:</h4>
+          <p>Натисніть кнопку <strong>«Google Maps»</strong> або <strong>«Waze»</strong> біля будь-якої точки для швидкого відкриття навігатора з побудованим заїздом.</p>
         </div>
       </div>
 
-      <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-end">
-        <button id="btn-close-help-confirm" class="w-full sm:w-auto px-5 py-2.5 bg-brand-600 text-white rounded-xl text-sm font-bold hover:bg-brand-700 transition active:scale-95">
+      <div class="mt-5 pt-3 border-t border-[#1e2f4c] flex justify-end">
+        <button id="btn-close-help-confirm" class="w-full sm:w-auto px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-black hover:bg-indigo-500 transition active:scale-95 shadow-md">
           Зрозуміло
         </button>
       </div>
@@ -931,8 +823,7 @@
       OSRM_TRIP_URL: 'https://router.project-osrm.org/trip/v1/driving/',
       VIEWBOX: '31.90,49.52,32.22,49.34',
       GEOCODE_DELAY_MS: 1100,
-      CACHE_STORAGE_KEY: 'cherkasy_geocode_cache_osm_v5',
-      THEME_STORAGE_KEY: 'cherkasy_route_theme'
+      CACHE_STORAGE_KEY: 'cherkasy_geocode_cache_osm_v5'
     };
 
     const state = {
@@ -949,17 +840,16 @@
     };
 
     const DEMO_ADDRESSES = [
-      'бул. Шевченка, 185',      // Центр (Облрада)
-      'вул. Смілянська, 2',       // Центр. ринок
-      'вул. Хрещатик, 223',      // Філармонія
-      'вул. Сумгаїтська, 10',     // ПЗР
+      'бул. Шевченка, 185',          // Центр (Облрада)
+      'вул. Смілянська, 2',           // Центр. ринок
+      'вул. Хрещатик, 223',          // Філармонія
+      'вул. Сумгаїтська, 10',         // ПЗР
       'вул. Володимира Великого, 55', // Митниця
-      'просп. Перемоги, 29'      // Епіцентр
+      'просп. Перемоги, 29'          // Епіцентр
     ];
 
     document.addEventListener('DOMContentLoaded', () => {
       loadGeocodeCache();
-      initThemeToggle();
       initLeafletMap();
       initEventListeners();
       
@@ -973,28 +863,6 @@
         setMobileTab('addresses');
       }
     });
-
-    // --- УПРАВЛІННЯ ТЕМОЮ ---
-    function initThemeToggle() {
-      const toggleBtn = document.getElementById('btn-toggle-theme');
-      const themeText = document.getElementById('theme-text');
-
-      const updateUI = () => {
-        const isDark = document.documentElement.classList.contains('dark');
-        if (themeText) themeText.textContent = isDark ? 'День' : 'Ніч';
-      };
-
-      updateUI();
-
-      toggleBtn.addEventListener('click', () => {
-        triggerHaptic();
-        const isDark = document.documentElement.classList.toggle('dark');
-        localStorage.setItem(CONFIG.THEME_STORAGE_KEY, isDark ? 'dark' : 'light');
-        updateUI();
-        renderAddressInputs();
-        showToast(isDark ? 'Увімкнено нічну тему' : 'Увімкнено денну тему', 'info', 1800);
-      });
-    }
 
     function loadGeocodeCache() {
       try {
@@ -1051,43 +919,36 @@
         const resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
         const data = await resp.json();
 
-        let title = 'Точка на карті';
+        let addressText = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
         if (data && data.address) {
           const road = data.address.road || '';
           const house = data.address.house_number || '';
-          if (road) title = `${road} ${house}`.trim();
-          else if (data.display_name) title = data.display_name.split(',')[0];
+          if (road) addressText = `${road} ${house}`.trim();
+          else if (data.display_name) addressText = data.display_name.split(',')[0];
         }
 
-        addAddressField(title);
+        const id = addAddressField(addressText);
+        const item = state.addresses.find(a => a.id === id);
+        if (item) {
+          item.lat = lat;
+          item.lon = lng;
+          item.displayName = data.display_name || addressText;
+        }
 
-        const normalized = cleanAndNormalizeQuery(title);
-        const cacheKey = normalized.toLowerCase().replace(/\s+/g, ' ');
-        state.geocodeCache[cacheKey] = {
-          lat: lat,
-          lon: lng,
-          displayName: data.display_name || title
-        };
-        saveGeocodeCache();
+        showToast(`Додано точку з карти: ${addressText}`, 'success');
 
-        showToast(`Додано точку: "${title}"`, 'success');
-
-        const tempMarker = L.circleMarker([lat, lng], {
-          radius: 8,
-          color: '#4f46e5',
-          fillColor: '#818cf8',
-          fillOpacity: 0.8
-        }).addTo(state.map);
-        setTimeout(() => state.map.removeLayer(tempMarker), 2200);
+        L.popup()
+          .setLatLng([lat, lng])
+          .setContent(`<b>Додано до списку:</b><br>${escapeHtml(addressText)}`)
+          .openOn(state.map);
 
       } catch (err) {
-        const title = `Черкаси (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
-        addAddressField(title);
-        showToast(`Додано: ${title}`, 'info');
+        addAddressField(`${lat.toFixed(5)}, ${lng.toFixed(5)}`);
+        showToast('Додано координати точки з карти', 'info');
       }
     }
 
-    // --- ДИНАМІЧНІ ПОЛЯ АДРЕС ---
+    // --- КЕРУВАННЯ СПИСКОМ АДРЕС ---
     function addAddressField(initialText = '') {
       triggerHaptic();
       const id = 'addr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
@@ -1108,7 +969,7 @@
     function removeAddressField(id) {
       triggerHaptic();
       if (state.addresses.length <= 2) {
-        showToast('Для маршруту потрібно щонайменше 2 адреси', 'warning');
+        showToast('Потрібно залишити щонайменше 2 адреси', 'warning');
         return;
       }
       state.addresses = state.addresses.filter(a => a.id !== id);
@@ -1139,7 +1000,7 @@
       if (b) b.textContent = state.addresses.length;
     }
 
-    // --- СПИСОК ВУЛИЦЬ ЧЕРКАС ДЛЯ КАСТОМНОГО АВТОДОПОВНЕННЯ (100% ЧИТАБЕЛЬНІСТЬ У ТЕМНІЙ ТЕМІ) ---
+    // --- СПИСОК ВУЛИЦЬ ЧЕРКАС ДЛЯ КАСТОМНОГО АВТОДОПОВНЕННЯ ---
     const CHERKASY_POPULAR_STREETS = [
       'бульвар Шевченка',
       'вулиця Смілянська',
@@ -1238,18 +1099,18 @@
         matches.forEach(st => {
           const itemBtn = document.createElement('button');
           itemBtn.type = 'button';
-          itemBtn.className = 'w-full text-left px-3 py-2.5 flex items-center justify-between text-xs sm:text-sm font-bold border-b border-slate-100 dark:border-slate-800/80 last:border-0 transition active:scale-98 cursor-pointer';
+          itemBtn.className = 'w-full text-left px-3.5 py-3 flex items-center justify-between text-xs sm:text-sm font-bold border-b border-[#1b2b46] last:border-0 transition active:scale-98 cursor-pointer hover:bg-[#1a2944] text-white';
 
           const targetPart = cleanQ.length >= 2 ? cleanQ : rawQ;
           const regex = new RegExp(`(${targetPart})`, 'gi');
-          const highlighted = escapeHtml(st).replace(regex, '<span class="text-amber-500 dark:text-amber-300 underline font-black">$1</span>');
+          const highlighted = escapeHtml(st).replace(regex, '<span class="text-amber-400 underline font-black">$1</span>');
 
           itemBtn.innerHTML = `
             <div class="flex items-center space-x-2 truncate pointer-events-none">
-              <span class="text-brand-500 dark:text-brand-400 flex-shrink-0">📍</span>
-              <span class="truncate">${highlighted}</span>
+              <span class="text-sky-400 flex-shrink-0">📍</span>
+              <span class="truncate text-white font-bold">${highlighted}</span>
             </div>
-            <span class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold flex-shrink-0 ml-1.5 pointer-events-none">Черкаси</span>
+            <span class="text-[10px] text-sky-300 bg-sky-950/80 px-2 py-0.5 rounded-md font-bold flex-shrink-0 ml-1.5 border border-sky-600/40 pointer-events-none">Черкаси</span>
           `;
 
           const selectHandler = (e) => {
@@ -1300,24 +1161,31 @@
       const container = document.getElementById('address-inputs-list');
       if (!container) return;
       container.innerHTML = '';
-      const isDark = document.documentElement.classList.contains('dark');
 
       state.addresses.forEach((item, index) => {
         const isStart = index === 0;
+        const isFinish = (index === state.addresses.length - 1 && state.addresses.length > 1);
         const row = document.createElement('div');
         
-        row.className = 'address-item-card p-2 sm:p-2.5 rounded-2xl border transition-all';
-        row.style.setProperty('background-color', isDark ? '#1e293b' : '#ffffff', 'important');
-        row.style.setProperty('border-color', item.error ? '#f43f5e' : (isDark ? '#334155' : '#cbd5e1'), 'important');
-        row.style.setProperty('color', isDark ? '#ffffff' : '#0f172a', 'important');
-        row.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+        row.className = 'address-item-card p-2 sm:p-2.5 rounded-2xl transition-all';
+        row.style.cssText = `
+          background-color: #15223a !important;
+          border: 1.5px solid ${item.error ? '#f43f5e' : '#283c5e'} !important;
+          color: #ffffff !important;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        `;
+
+        const badgeBg = isStart 
+          ? 'linear-gradient(135deg, #10b981, #059669)' 
+          : (isFinish ? 'linear-gradient(135deg, #f43f5e, #be123c)' : 'linear-gradient(135deg, #3b82f6, #1d4ed8)');
+        const badgeBorder = isStart ? '#059669' : (isFinish ? '#9f1239' : '#1e40af');
 
         row.innerHTML = `
           <!-- Головний рядок: Номер + Поле адреси (на всю ширину) + Видалення -->
           <div class="flex items-center space-x-2">
             <!-- Номер зупинки -->
-            <div class="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black" style="background-color: ${isStart ? '#10b981' : (isDark ? '#334155' : '#f1f5f9')} !important; color: ${isStart || isDark ? '#ffffff' : '#0f172a'} !important; border: 1px solid ${isStart ? '#059669' : (isDark ? '#475569' : '#cbd5e1')} !important;">
-              ${isStart ? '1' : (index + 1)}
+            <div class="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black text-white shadow-md" style="background: ${badgeBg} !important; border: 1.5px solid ${badgeBorder} !important;">
+              ${isStart ? '★' : (index + 1)}
             </div>
 
             <!-- Поле адреси з кастомним автодоповненням на всю ширину -->
@@ -1326,36 +1194,36 @@
                      autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"
                      value="${escapeHtml(item.text)}"
                      placeholder="Вулиця та номер (напр. Смілянська, 2)"
-                     style="background: transparent !important; color: ${isDark ? '#ffffff' : '#0f172a'} !important; -webkit-text-fill-color: ${isDark ? '#ffffff' : '#0f172a'} !important; caret-color: ${isDark ? '#38bdf8' : '#4f46e5'} !important;"
-                     class="street-input w-full py-1.5 px-2.5 rounded-lg border-0 font-bold text-sm sm:text-base outline-none tracking-tight"
+                     style="background-color: #0d1627 !important; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; caret-color: #38bdf8 !important; border: 1.5px solid #283a57 !important;"
+                     class="street-input w-full py-1.5 px-3 rounded-xl font-bold text-sm sm:text-base outline-none tracking-tight shadow-inner"
               />
               <!-- Dropdown список підказок вулиць -->
               <div id="autocomplete-list-${item.id}" class="autocomplete-dropdown hidden absolute left-0 right-0 top-full mt-1.5 z-50 rounded-xl shadow-2xl border max-h-56 overflow-y-auto"></div>
-              ${item.error ? `<span class="text-[10px] text-rose-500 font-bold block px-2 pb-0.5">${item.error}</span>` : ''}
+              ${item.error ? `<span class="text-[11px] text-rose-400 font-bold block px-2 pt-1">${item.error}</span>` : ''}
             </div>
 
             <!-- Кнопка видалення -->
-            <button type="button" class="btn-remove-addr p-2 rounded-xl transition active:scale-90 flex-shrink-0 cursor-pointer" style="color: ${isDark ? '#94a3b8' : '#64748b'};" title="Видалити адресу">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            <button type="button" class="btn-remove-addr p-2 rounded-xl transition active:scale-90 flex-shrink-0 cursor-pointer text-slate-400 hover:text-rose-400 hover:bg-rose-950/30" title="Видалити адресу">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </div>
 
           <!-- Нижній рядок: Статус точки + Переміщення вгору/вниз -->
-          <div class="flex items-center justify-between mt-1.5 pt-1.5 border-t text-[11px]" style="border-color: ${isDark ? '#334155' : '#f1f5f9'};">
-            <span class="font-medium pl-1 flex items-center gap-1.5" style="color: ${isDark ? '#94a3b8' : '#64748b'};">
-              <span class="w-1.5 h-1.5 rounded-full" style="background-color: ${isStart ? '#10b981' : '#6366f1'};"></span>
-              ${isStart ? 'Старт (Склад / Депо)' : `Точка №${index + 1}`}
+          <div class="flex items-center justify-between mt-2 pt-1.5 border-t border-[#1e2f4c] text-[11px]">
+            <span class="font-bold pl-1 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full" style="background-color: ${isStart ? '#10b981' : (isFinish ? '#f43f5e' : '#38bdf8')}; box-shadow: 0 0 8px ${isStart ? '#10b981' : (isFinish ? '#f43f5e' : '#38bdf8')};"></span>
+              <span style="color: ${isStart ? '#34d399' : (isFinish ? '#fb7185' : '#93c5fd')};">${isStart ? 'Старт (Склад / Депо)' : (isFinish ? 'Фінішна точка' : `Зупинка №${index + 1}`)}</span>
             </span>
 
             <div class="flex items-center space-x-1.5">
-              <button type="button" class="btn-move-up px-2 py-0.5 rounded-md transition active:scale-90 font-bold flex items-center gap-0.5 cursor-pointer ${index === 0 ? 'opacity-20 cursor-not-allowed' : ''}" style="color: ${isDark ? '#cbd5e1' : '#475569'}; background: ${isDark ? '#0f172a' : '#f8fafc'};" 
+              <button type="button" class="btn-move-up px-2.5 py-1 rounded-lg transition active:scale-90 font-bold flex items-center gap-1 cursor-pointer ${index === 0 ? 'opacity-20 cursor-not-allowed text-slate-500 bg-[#0e172a]' : 'text-slate-300 bg-[#0e172a] hover:bg-[#1f2d48] hover:text-white border border-[#233550]'}" 
                       title="Вгору" ${index === 0 ? 'disabled' : ''}>
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" /></svg>
+                <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" /></svg>
                 <span>Вгору</span>
               </button>
-              <button type="button" class="btn-move-down px-2 py-0.5 rounded-md transition active:scale-90 font-bold flex items-center gap-0.5 cursor-pointer ${index === state.addresses.length - 1 ? 'opacity-20 cursor-not-allowed' : ''}" style="color: ${isDark ? '#cbd5e1' : '#475569'}; background: ${isDark ? '#0f172a' : '#f8fafc'};" 
+              <button type="button" class="btn-move-down px-2.5 py-1 rounded-lg transition active:scale-90 font-bold flex items-center gap-1 cursor-pointer ${index === state.addresses.length - 1 ? 'opacity-20 cursor-not-allowed text-slate-500 bg-[#0e172a]' : 'text-slate-300 bg-[#0e172a] hover:bg-[#1f2d48] hover:text-white border border-[#233550]'}" 
                       title="Вниз" ${index === state.addresses.length - 1 ? 'disabled' : ''}>
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
+                <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" /></svg>
                 <span>Вниз</span>
               </button>
             </div>
@@ -1626,15 +1494,15 @@
       const latLngs = geometry.coordinates.map(coord => [coord[1], coord[0]]);
 
       const routeCasing = L.polyline(latLngs, {
-        color: '#1e1b4b',
-        weight: 8,
-        opacity: 0.35,
+        color: '#030712',
+        weight: 9,
+        opacity: 0.65,
         lineCap: 'round',
         lineJoin: 'round'
       });
 
       const routeLine = L.polyline(latLngs, {
-        color: '#4f46e5',
+        color: '#2563eb',
         weight: 5,
         opacity: 0.95,
         lineCap: 'round',
@@ -1685,25 +1553,25 @@
         });
 
         const popupContent = `
-          <div class="space-y-1.5 p-1 text-slate-900 dark:text-white">
+          <div class="space-y-1.5 p-1 text-white">
             <div class="flex items-center space-x-1.5">
               <span class="px-2 py-0.5 rounded text-xs font-black ${
-                isStart ? 'bg-emerald-100 text-emerald-800' : isFinish ? 'bg-rose-100 text-rose-800' : 'bg-brand-100 text-brand-800'
+                isStart ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : isFinish ? 'bg-rose-950 text-rose-300 border border-rose-700' : 'bg-indigo-950 text-indigo-300 border border-indigo-700'
               }">
                 ${isStart ? 'Старт • №1' : isFinish ? `Фініш • №${stopNumber}` : `Зупинка №${stopNumber}`}
               </span>
             </div>
-            <p class="font-extrabold text-sm">${escapeHtml(stop.inputAddress)}</p>
-            <p class="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2">${escapeHtml(stop.displayName || '')}</p>
-            <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">💡 Можна перетягнути мітку для точного заїзду</p>
-            <div class="pt-2 flex items-center space-x-2 border-t border-slate-200 dark:border-slate-700">
+            <p class="font-extrabold text-sm text-white">${escapeHtml(stop.inputAddress)}</p>
+            <p class="text-[11px] text-slate-300 line-clamp-2">${escapeHtml(stop.displayName || '')}</p>
+            <p class="text-[10px] text-emerald-400 font-bold">💡 Можна перетягнути мітку для точного заїзду</p>
+            <div class="pt-2 flex items-center space-x-2 border-t border-[#233550]">
               <a href="https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lon}" target="_blank" 
-                 class="inline-flex items-center text-xs font-bold text-brand-600 dark:text-brand-400 hover:text-brand-800">
+                 class="inline-flex items-center text-xs font-bold text-sky-400 hover:text-white">
                 <span>Google</span>
                 <svg class="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
               </a>
               <a href="https://waze.com/ul?ll=${stop.lat},${stop.lon}&navigate=yes" target="_blank" 
-                 class="inline-flex items-center text-xs font-bold text-sky-500 hover:text-sky-700 ml-2">
+                 class="inline-flex items-center text-xs font-bold text-sky-300 hover:text-white ml-2">
                 <span>Waze</span>
               </a>
             </div>
@@ -1770,23 +1638,23 @@
           const stepsCount = leg.steps ? leg.steps.length : 0;
 
           legInfoHtml = `
-            <div class="space-y-1 pl-4 py-1 text-slate-400 dark:text-slate-500 text-xs">
+            <div class="space-y-1 pl-4 py-1 text-slate-400 text-xs">
               <div class="flex items-center space-x-2">
-                <span class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></span>
-                <div class="flex items-center space-x-1.5 text-[11px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg font-bold">
+                <span class="w-0.5 h-6 bg-[#2b3e5e]"></span>
+                <div class="flex items-center space-x-1.5 text-[11px] bg-[#101a2d] text-slate-300 px-2.5 py-1 rounded-lg font-bold border border-[#1f2f4c]">
                   <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                   <span>${legDistKm} км</span>
                   <span>•</span>
                   <span>~ ${legTimeMins} хв</span>
                   ${stepsCount > 0 ? `
-                    <button type="button" class="btn-toggle-steps text-brand-600 dark:text-brand-400 hover:text-brand-800 ml-1 font-bold underline text-[10px]" data-leg="${index - 1}">
+                    <button type="button" class="btn-toggle-steps text-sky-400 hover:text-white ml-1 font-bold underline text-[10px]" data-leg="${index - 1}">
                       ${stepsCount} маневрів ▼
                     </button>
                   ` : ''}
                 </div>
               </div>
 
-              <div id="steps-container-${index - 1}" class="hidden pl-3 py-1 space-y-1 text-[11px] text-slate-700 dark:text-slate-300 border-l-2 border-indigo-200 dark:border-indigo-800 my-1 bg-slate-50 dark:bg-slate-800 p-2 rounded-lg font-medium">
+              <div id="steps-container-${index - 1}" class="hidden pl-3 py-1 space-y-1 text-[11px] text-slate-300 border-l-2 border-indigo-500 my-1 bg-[#101a2d] p-2 rounded-lg font-medium">
                 ${renderManeuverSteps(leg.steps)}
               </div>
             </div>
@@ -1799,31 +1667,31 @@
 
         card.innerHTML = `
           ${legInfoHtml}
-          <div class="stop-card-inner flex items-start space-x-2.5 sm:space-x-3 p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-brand-400 dark:hover:border-slate-500 hover:shadow-xs transition">
+          <div class="stop-card-inner flex items-start space-x-2.5 sm:space-x-3 p-3 rounded-xl border border-[#283c5e] bg-[#142036] hover:border-sky-400 transition shadow-sm">
             
             <!-- Чекбокс виконання -->
             <div class="pt-1 no-print">
               <input type="checkbox" id="chk-stop-${stop.id}" 
-                     class="w-4 h-4 text-emerald-600 rounded border-slate-300 dark:border-slate-600 focus:ring-emerald-500 cursor-pointer">
+                     class="w-4 h-4 text-emerald-500 rounded border-slate-600 bg-[#0e172a] focus:ring-emerald-500 cursor-pointer">
             </div>
 
             <!-- Номер зупинки -->
-            <div class="stop-badge-icon flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-black text-xs text-white ${
-              isStart ? 'bg-emerald-600 shadow-sm shadow-emerald-500/30' : isFinish ? 'bg-rose-600 shadow-sm shadow-rose-500/30' : 'bg-brand-600'
+            <div class="stop-badge-icon flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-md ${
+              isStart ? 'bg-emerald-600 shadow-emerald-500/30' : isFinish ? 'bg-rose-600 shadow-rose-500/30' : 'bg-indigo-600 shadow-indigo-500/30'
             }">
-              ${isStart ? '1' : stopNumber}
+              ${isStart ? '★' : stopNumber}
             </div>
 
             <!-- Адреса -->
             <div class="flex-1 min-w-0 cursor-pointer stop-click-target">
               <div class="flex items-center space-x-1.5">
-                <span class="text-xs font-bold ${isStart ? 'text-emerald-700 dark:text-emerald-400' : isFinish ? 'text-rose-700 dark:text-rose-400' : 'text-slate-600 dark:text-slate-300'}">
+                <span class="text-xs font-bold ${isStart ? 'text-emerald-400' : isFinish ? 'text-rose-400' : 'text-sky-400'}">
                   ${isStart ? 'Старт' : isFinish ? 'Фініш' : `Зупинка №${stopNumber}`}
                 </span>
-                <span class="completed-badge hidden px-1.5 py-0.2 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">✓ Доставлено</span>
+                <span class="completed-badge hidden px-1.5 py-0.2 rounded text-[10px] font-black bg-emerald-950 text-emerald-300 border border-emerald-700">✓ Доставлено</span>
               </div>
-              <h4 class="text-sm font-bold text-slate-900 dark:text-white truncate stop-title">${escapeHtml(stop.inputAddress)}</h4>
-              <p class="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5" title="${escapeHtml(stop.displayName || '')}">
+              <h4 class="text-sm font-extrabold text-white truncate stop-title">${escapeHtml(stop.inputAddress)}</h4>
+              <p class="text-xs text-slate-400 truncate mt-0.5" title="${escapeHtml(stop.displayName || '')}">
                 ${escapeHtml(stop.displayName || 'Черкаси')}
               </p>
             </div>
@@ -1831,11 +1699,11 @@
             <!-- Кнопки швидких дій -->
             <div class="flex items-center space-x-1 no-print">
               <a href="https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lon}" target="_blank"
-                 class="p-2 text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-700 transition active:scale-90"
+                 class="p-2 text-sky-400 hover:text-white rounded-lg hover:bg-[#1f2f4c] transition active:scale-90"
                  title="Google Maps">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               </a>
-              <button type="button" class="btn-copy-single-addr p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition active:scale-90" title="Скопіювати адресу">
+              <button type="button" class="btn-copy-single-addr p-2 text-slate-400 hover:text-white rounded-lg hover:bg-[#1f2f4c] transition active:scale-90" title="Скопіювати адресу">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
               </button>
             </div>
@@ -1890,10 +1758,10 @@
 
         const returnCard = document.createElement('div');
         returnCard.innerHTML = `
-          <div class="flex items-center space-x-2 pl-4 py-1 text-slate-400 dark:text-slate-500 text-xs">
-            <span class="w-0.5 h-6 bg-slate-300 dark:bg-slate-700"></span>
-            <div class="flex items-center space-x-1.5 text-[11px] bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 px-2.5 py-1 rounded-md font-bold border border-emerald-300 dark:border-emerald-800">
-              <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+          <div class="flex items-center space-x-2 pl-4 py-1 text-slate-400 text-xs">
+            <span class="w-0.5 h-6 bg-[#2b3e5e]"></span>
+            <div class="flex items-center space-x-1.5 text-[11px] bg-emerald-950/80 text-emerald-300 px-2.5 py-1 rounded-xl font-bold border border-emerald-700/60 shadow-xs">
+              <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
               <span>Повернення на базу: <strong>${returnDistKm} км</strong> (~ ${returnTimeMins} хв)</span>
             </div>
           </div>
@@ -1957,13 +1825,15 @@
 
       if (isCompleted) {
         state.completedStops.add(stopId);
-        inner.classList.add('bg-slate-50', 'dark:bg-slate-900', 'opacity-65');
+        inner.classList.add('opacity-50');
+        inner.style.borderColor = '#1e293b';
         badge.classList.remove('hidden');
         title.classList.add('line-through', 'text-slate-400');
         if (markerWrapper) markerWrapper.querySelector('.custom-marker-pin')?.classList.add('marker-completed');
       } else {
         state.completedStops.delete(stopId);
-        inner.classList.remove('bg-slate-50', 'dark:bg-slate-900', 'opacity-65');
+        inner.classList.remove('opacity-50');
+        inner.style.borderColor = '#283c5e';
         badge.classList.add('hidden');
         title.classList.remove('line-through', 'text-slate-400');
         if (markerWrapper) markerWrapper.querySelector('.custom-marker-pin')?.classList.remove('marker-completed');
@@ -2026,11 +1896,19 @@
 
     function highlightStopInList(index) {
       document.querySelectorAll('[id^="stop-card-"]').forEach(el => {
-        el.querySelector('.stop-card-inner')?.classList.remove('ring-2', 'ring-brand-500', 'bg-brand-50/40');
+        const inner = el.querySelector('.stop-card-inner');
+        if (inner) {
+          inner.style.borderColor = '#283c5e';
+          inner.style.boxShadow = 'none';
+        }
       });
       const active = document.getElementById(`stop-card-${index}`);
       if (active) {
-        active.querySelector('.stop-card-inner')?.classList.add('ring-2', 'ring-brand-500', 'bg-brand-50/40');
+        const inner = active.querySelector('.stop-card-inner');
+        if (inner) {
+          inner.style.borderColor = '#38bdf8';
+          inner.style.boxShadow = '0 0 15px rgba(56, 189, 248, 0.35)';
+        }
         active.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
     }
@@ -2130,7 +2008,6 @@
       triggerHaptic();
       showToast('Калібруємо GPS через супутники для максимальної точності...', 'info', 3000);
 
-      // Використовуємо watchPosition для відбору координати з найменшою похибкою
       let bestPos = null;
       let watchId = null;
 
@@ -2147,9 +2024,9 @@
         // Синє коло радіуса похибки
         L.circle([lat, lon], {
           radius: Math.max(accuracy, 10),
-          color: '#3b82f6',
-          fillColor: '#93c5fd',
-          fillOpacity: 0.25,
+          color: '#38bdf8',
+          fillColor: '#38bdf8',
+          fillOpacity: 0.2,
           weight: 1.5
         }).addTo(state.userLocationLayer);
 
@@ -2158,7 +2035,7 @@
           html: `
             <div class="relative w-5 h-5 flex items-center justify-center">
               <div class="gps-pulse-ring"></div>
-              <div class="w-4 h-4 bg-blue-600 border-2 border-white rounded-full shadow-md"></div>
+              <div class="w-4 h-4 bg-sky-400 border-2 border-white rounded-full shadow-lg"></div>
             </div>
           `,
           iconSize: [20, 20],
@@ -2215,7 +2092,6 @@
         { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
       );
 
-      // Якщо за 2.5 секунди не досягли 15м, беремо найкращу позицію
       setTimeout(() => {
         if (bestPos) finishGps();
       }, 2500);
@@ -2236,21 +2112,21 @@
       const addressCard = document.getElementById('address-input-card');
 
       [btnAddr, btnMap, btnRoute].forEach(btn => {
-        btn.classList.remove('text-brand-600', 'dark:text-brand-400', 'font-black');
-        btn.classList.add('text-slate-500', 'dark:text-slate-400', 'font-medium');
+        btn.classList.remove('text-sky-400', 'font-black');
+        btn.classList.add('text-slate-400', 'font-medium');
       });
 
       if (tab === 'addresses') {
-        btnAddr.classList.add('text-brand-600', 'dark:text-brand-400', 'font-black');
-        btnAddr.classList.remove('text-slate-500', 'dark:text-slate-400', 'font-medium');
+        btnAddr.classList.add('text-sky-400', 'font-black');
+        btnAddr.classList.remove('text-slate-400', 'font-medium');
 
         sidebarPanel.classList.remove('hidden');
         if (addressCard) addressCard.classList.remove('hidden');
         mapPanel.classList.add('hidden');
         resultsPanel.classList.add('hidden');
       } else if (tab === 'map') {
-        btnMap.classList.add('text-brand-600', 'dark:text-brand-400', 'font-black');
-        btnMap.classList.remove('text-slate-500', 'dark:text-slate-400', 'font-medium');
+        btnMap.classList.add('text-sky-400', 'font-black');
+        btnMap.classList.remove('text-slate-400', 'font-medium');
 
         mapPanel.classList.remove('hidden');
         mapPanel.classList.add('flex');
@@ -2265,8 +2141,8 @@
           }
         }, 150);
       } else if (tab === 'route') {
-        btnRoute.classList.add('text-brand-600', 'dark:text-brand-400', 'font-black');
-        btnRoute.classList.remove('text-slate-500', 'dark:text-slate-400', 'font-medium');
+        btnRoute.classList.add('text-sky-400', 'font-black');
+        btnRoute.classList.remove('text-slate-400', 'font-medium');
 
         sidebarPanel.classList.remove('hidden');
         if (addressCard) addressCard.classList.add('hidden');
@@ -2367,10 +2243,8 @@
 
       modeFieldsBtn.addEventListener('click', () => {
         triggerHaptic();
-        modeFieldsBtn.classList.add('bg-white', 'dark:bg-slate-700', 'text-brand-700', 'dark:text-brand-300', 'shadow-xs', 'font-bold');
-        modeFieldsBtn.classList.remove('text-slate-600', 'dark:text-slate-400');
-        modeBulkBtn.classList.remove('bg-white', 'dark:bg-slate-700', 'text-brand-700', 'dark:text-brand-300', 'shadow-xs', 'font-bold');
-        modeBulkBtn.classList.add('text-slate-600', 'dark:text-slate-400');
+        modeFieldsBtn.className = 'px-2.5 py-1 rounded-lg bg-indigo-600 text-white shadow-xs font-black transition';
+        modeBulkBtn.className = 'px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-medium transition';
 
         fieldsContainer.classList.remove('hidden');
         bulkContainer.classList.add('hidden');
@@ -2378,10 +2252,8 @@
 
       modeBulkBtn.addEventListener('click', () => {
         triggerHaptic();
-        modeBulkBtn.classList.add('bg-white', 'dark:bg-slate-700', 'text-brand-700', 'dark:text-brand-300', 'shadow-xs', 'font-bold');
-        modeBulkBtn.classList.remove('text-slate-600', 'dark:text-slate-400');
-        modeFieldsBtn.classList.remove('bg-white', 'dark:bg-slate-700', 'text-brand-700', 'dark:text-brand-300', 'shadow-xs', 'font-bold');
-        modeFieldsBtn.classList.add('text-slate-600', 'dark:text-slate-400');
+        modeBulkBtn.className = 'px-2.5 py-1 rounded-lg bg-indigo-600 text-white shadow-xs font-black transition';
+        modeFieldsBtn.className = 'px-2.5 py-1 rounded-lg text-slate-400 hover:text-white font-medium transition';
 
         bulkContainer.classList.remove('hidden');
         fieldsContainer.classList.add('hidden');
@@ -2443,24 +2315,24 @@
       const toast = document.createElement('div');
 
       const icons = {
-        success: `<svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
-        error: `<svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
-        warning: `<svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>`,
-        info: `<svg class="w-5 h-5 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`
+        success: `<svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+        error: `<svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+        warning: `<svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>`,
+        info: `<svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`
       };
 
       const borderColors = {
-        success: 'border-emerald-300 dark:border-emerald-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white',
-        error: 'border-rose-300 dark:border-rose-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white',
-        warning: 'border-amber-300 dark:border-amber-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white',
-        info: 'border-blue-300 dark:border-blue-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white'
+        success: 'border-emerald-500/50 bg-[#15233c] text-emerald-300 shadow-emerald-950/50',
+        error: 'border-rose-500/50 bg-[#15233c] text-rose-300 shadow-rose-950/50',
+        warning: 'border-amber-500/50 bg-[#15233c] text-amber-300 shadow-amber-950/50',
+        info: 'border-sky-500/50 bg-[#15233c] text-sky-300 shadow-sky-950/50'
       };
 
-      toast.className = `pointer-events-auto flex items-start space-x-3 p-3.5 rounded-2xl border ${borderColors[type] || borderColors.info} transition-all duration-300 transform translate-y-2 opacity-0 shadow-xl`;
+      toast.className = `pointer-events-auto flex items-start space-x-3 p-3.5 rounded-2xl border ${borderColors[type] || borderColors.info} transition-all duration-300 transform translate-y-2 opacity-0 shadow-2xl backdrop-blur-md`;
       toast.innerHTML = `
         <div class="flex-shrink-0 mt-0.5">${icons[type] || icons.info}</div>
         <div class="flex-1 text-xs sm:text-sm font-bold leading-snug">${escapeHtml(message)}</div>
-        <button class="flex-shrink-0 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 p-0.5 rounded transition">
+        <button class="flex-shrink-0 text-slate-400 hover:text-white p-0.5 rounded transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
       `;
