@@ -23,10 +23,10 @@
 
 ---
 
-## 🚀 Як користуватися онлайн (GitHub Pages)
+## 🚀 Онлайн-додаток (GitHub Pages)
 
-Після публікації на GitHub Pages цей додаток доступний за посиланням:
-`https://<ваш-логін-github>.github.io/<назва-репозиторію>/`
+Додаток розгорнуто та готовий до роботи за посиланням:
+👉 **[https://i4dovpoli.github.io/maps/](https://i4dovpoli.github.io/maps/)**
 
 ---
 
