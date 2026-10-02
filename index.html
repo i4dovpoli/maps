@@ -18,7 +18,7 @@
     })();
   </script>
 
-  <!-- Tailwind CSS CDN з підтримкою dark mode через клас -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -61,17 +61,91 @@
       font-size: 16px !important;
     }
 
-    /* Safe Area для сучасних смартфонів */
+    /* Safe Area для iPhone з вирізом / Dynamic Island */
     .pb-safe {
-      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.75rem);
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.85rem);
     }
     .pt-safe {
       padding-top: env(safe-area-inset-top, 0px);
     }
 
-    /* ================= ТЕМНА ТЕМА ДЛЯ КАРТИ OPENSTREETMAP ================= */
+    /* ================= 100% ГАРАНТОВАНИЙ ТЕМНИЙ РЕЖИМ (ВИПРАВЛЕННЯ ТЕКСТУ) ================= */
+    /* Жорстко закріплені кольори, які ніколи не ламаються на мобільних телефонах */
+    html.dark, html.dark body {
+      background-color: #0b0f19 !important;
+      color: #ffffff !important;
+    }
+
+    html.dark input[type="text"],
+    html.dark textarea {
+      background-color: #1e293b !important;
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+      border: 1.5px solid #475569 !important;
+      caret-color: #818cf8 !important;
+    }
+
+    html.dark input[type="text"]:focus,
+    html.dark textarea:focus {
+      background-color: #0f172a !important;
+      border-color: #6366f1 !important;
+      outline: none !important;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4) !important;
+    }
+
+    html.dark input::placeholder,
+    html.dark textarea::placeholder {
+      color: #94a3b8 !important;
+      -webkit-text-fill-color: #94a3b8 !important;
+      opacity: 1 !important;
+    }
+
+    html.dark .bg-white {
+      background-color: #111827 !important;
+      color: #ffffff !important;
+      border-color: #1f2937 !important;
+    }
+
+    html.dark .bg-slate-50 {
+      background-color: #1e293b !important;
+      color: #ffffff !important;
+    }
+
+    html.dark .bg-slate-100 {
+      background-color: #1e293b !important;
+      color: #ffffff !important;
+    }
+
+    html.dark .text-slate-900,
+    html.dark .text-slate-800,
+    html.dark .text-slate-700 {
+      color: #ffffff !important;
+    }
+
+    html.dark .text-slate-500,
+    html.dark .text-slate-600 {
+      color: #cbd5e1 !important;
+    }
+
+    html.dark .border-slate-100,
+    html.dark .border-slate-200,
+    html.dark .border-slate-300 {
+      border-color: #334155 !important;
+    }
+
+    html.dark .chip-hub {
+      background-color: #1e293b !important;
+      color: #f1f5f9 !important;
+      border-color: #475569 !important;
+    }
+    html.dark .chip-hub:hover {
+      background-color: #334155 !important;
+      color: #ffffff !important;
+    }
+
+    /* Нічний режим для карти OpenStreetMap */
     .dark .leaflet-tile-pane {
-      filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(90%);
+      filter: invert(100%) hue-rotate(180deg) brightness(88%) contrast(92%);
     }
 
     .dark .leaflet-popup-content-wrapper {
@@ -87,18 +161,22 @@
       background: #020617;
     }
 
-    /* Стилі кастомних маркерів на карті */
+    /* Маркери */
     .custom-marker-pin {
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 9999px;
-      font-weight: 800;
+      font-weight: 900;
       color: #ffffff;
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
       border: 2.5px solid #ffffff;
       transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
-      cursor: pointer;
+      cursor: grab;
+    }
+    .custom-marker-pin:active {
+      cursor: grabbing;
+      transform: scale(1.35);
     }
     .custom-marker-pin:hover, .custom-marker-pin.active {
       transform: scale(1.28);
@@ -137,37 +215,20 @@
       100% { transform: scale(1.65); opacity: 0; }
     }
 
-    /* GPS пульсуюча точка на карті */
     .gps-pulse-ring {
       position: absolute;
-      top: -8px;
-      left: -8px;
-      right: -8px;
-      bottom: -8px;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
       border-radius: 9999px;
-      border: 3px solid rgba(59, 130, 246, 0.7);
+      border: 3px solid rgba(59, 130, 246, 0.8);
       animation: pulseGps 1.8s infinite ease-out;
       pointer-events: none;
     }
     @keyframes pulseGps {
-      0% { transform: scale(0.8); opacity: 1; }
-      100% { transform: scale(2.2); opacity: 0; }
-    }
-
-    /* Leaflet popup */
-    .leaflet-popup-content-wrapper {
-      border-radius: 16px;
-      box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.25);
-      padding: 2px;
-      border: 1px solid #e2e8f0;
-    }
-    .leaflet-popup-content {
-      margin: 12px 14px;
-      line-height: 1.4;
-    }
-    .leaflet-container {
-      font-family: 'Inter', sans-serif;
-      background: #e9ecef;
+      0% { transform: scale(0.7); opacity: 1; }
+      100% { transform: scale(2.4); opacity: 0; }
     }
 
     /* Скролбари */
@@ -226,7 +287,7 @@
         <div>
           <div class="flex items-center space-x-1.5">
             <h1 class="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">Черкаси<span class="text-brand-600 dark:text-brand-400">Route</span></h1>
-            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
               OSM PRO
             </span>
           </div>
@@ -237,9 +298,9 @@
       <!-- Верхні дії + Кнопка перемикання теми -->
       <div class="flex items-center space-x-1.5 sm:space-x-2">
         
-        <!-- КНОПКА ТЕМНОЇ ТЕМИ (DARK MODE) -->
+        <!-- КНОПКА ТЕМНОЇ ТЕМИ -->
         <button id="btn-toggle-theme" 
-                class="p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-amber-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition active:scale-95 flex items-center gap-1.5 shadow-xs"
+                class="p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-amber-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition active:scale-95 flex items-center gap-1.5 shadow-xs"
                 title="Перемкнути нічну тему">
           <svg id="theme-icon-moon" class="w-4 h-4 hidden dark:inline text-amber-400" fill="currentColor" viewBox="0 0 20 20">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
@@ -247,7 +308,7 @@
           <svg id="theme-icon-sun" class="w-4 h-4 inline dark:hidden text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
           </svg>
-          <span class="text-xs font-bold hidden sm:inline text-slate-800 dark:text-slate-200" id="theme-text">Ніч</span>
+          <span class="text-xs font-black hidden sm:inline text-slate-800 dark:text-white" id="theme-text">Ніч</span>
         </button>
 
         <button id="btn-load-demo" 
@@ -268,7 +329,7 @@
         </button>
 
         <button id="btn-open-help" 
-                class="p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition active:scale-95"
+                class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition active:scale-95"
                 title="Довідка">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -280,7 +341,7 @@
   </header>
 
   <!-- ==================== ГОЛОВНА РОБОЧА ЗОНА ==================== -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-2.5 sm:p-4 lg:p-6 flex flex-col mb-16 lg:mb-0">
+  <main class="flex-1 max-w-7xl w-full mx-auto p-2.5 sm:p-4 lg:p-6 flex flex-col mb-18 lg:mb-0">
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 flex-1 items-start">
       
@@ -293,7 +354,7 @@
           <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-3">
             <div class="flex items-center space-x-2">
               <span class="w-2.5 h-2.5 rounded-full bg-brand-600 dark:bg-brand-400 animate-pulse"></span>
-              <h2 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white">Адреси доставки</h2>
+              <h2 class="text-sm sm:text-base font-black text-slate-900 dark:text-white">Адреси доставки</h2>
             </div>
             
             <!-- Перемикач режиму введення (Список / Текст) -->
@@ -301,7 +362,7 @@
               <button id="mode-fields-btn" class="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-700 shadow-xs text-brand-700 dark:text-brand-300 font-bold transition">
                 Полями
               </button>
-              <button id="mode-bulk-btn" class="px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition">
+              <button id="mode-bulk-btn" class="px-2.5 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium transition">
                 Текстом
               </button>
             </div>
@@ -313,28 +374,28 @@
               Швидке додавання локацій Черкас:
             </span>
             <div class="flex flex-wrap gap-1.5" id="quick-hubs-chips">
-              <button type="button" data-addr="бул. Шевченка, 208" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="бул. Шевченка, 208" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
                 🏢 ТРЦ Любава
               </button>
-              <button type="button" data-addr="просп. Перемоги, 29" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="просп. Перемоги, 29" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
                 🛒 Епіцентр
               </button>
-              <button type="button" data-addr="вул. Смілянська, 2" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="вул. Смілянська, 2" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
                 🏬 Центр. ринок
               </button>
-              <button type="button" data-addr="вул. Припортова, 34" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="вул. Припортова, 34" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
                 🛍️ Дніпро-Плаза
               </button>
-              <button type="button" data-addr="вул. Хоменка, 15" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="вул. Хоменка, 15" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
                 📦 Нова Пошта №1
               </button>
-              <button type="button" data-addr="вул. Володимира Ложешнікова, 1" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition font-bold active:scale-95">
+              <button type="button" data-addr="вул. Володимира Ложешнікова, 1" class="chip-hub px-2 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition font-bold active:scale-95">
                 🚆 Вокзал
               </button>
             </div>
           </div>
 
-          <!-- Datalist для автодоповнення вулиць Черкас -->
+          <!-- Datalist для швидкого автодоповнення вулиць Черкас -->
           <datalist id="cherkasy-streets">
             <option value="бульвар Шевченка"></option>
             <option value="вулиця Смілянська"></option>
@@ -374,8 +435,8 @@
               </button>
 
               <button id="btn-use-geolocation" type="button" 
-                      class="inline-flex items-center py-2.5 px-3 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none transition active:scale-95 shadow-xs"
-                      title="Визначити точне GPS місцезнаходження">
+                      class="inline-flex items-center py-2.5 px-3 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-black text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none transition active:scale-95 shadow-xs"
+                      title="Визначити точне супутникове GPS місцезнаходження">
                 <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 mr-1 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -591,27 +652,31 @@
           </div>
 
           <!-- НИЖНЯ ПЛАВАЮЧА КАРТКА «ПОТОЧНА ДОСТАВКА» ДЛЯ ВОДІЯ НА КАРТІ -->
-          <div id="floating-next-stop-card" class="hidden absolute bottom-3 left-3 right-3 sm:left-4 sm:right-auto sm:max-w-md z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-3 sm:p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl transition-all">
+          <div id="floating-next-stop-card" class="hidden absolute bottom-3 left-3 right-3 sm:left-4 sm:right-auto sm:max-w-md z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-3 sm:p-3.5 rounded-2xl border border-slate-300 dark:border-slate-700 shadow-xl transition-all">
             <div class="flex items-center justify-between mb-1.5">
-              <span id="floating-stop-badge" class="px-2 py-0.5 rounded-md text-[11px] font-extrabold bg-brand-100 dark:bg-brand-950 text-brand-800 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
+              <span id="floating-stop-badge" class="px-2 py-0.5 rounded-md text-[11px] font-black bg-brand-100 dark:bg-brand-950 text-brand-800 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
                 Наступна: Зупинка №2
               </span>
               <span id="floating-stop-eta" class="text-xs font-bold text-slate-600 dark:text-slate-300">
                 1.4 км • ~ 4 хв
               </span>
             </div>
-            <h4 id="floating-stop-addr" class="text-sm font-bold text-slate-900 dark:text-white truncate mb-2">
+            <h4 id="floating-stop-addr" class="text-sm font-black text-slate-900 dark:text-white truncate mb-2">
               вул. Смілянська, 2
             </h4>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1.5">
               <a id="floating-stop-nav-btn" href="#" target="_blank" 
-                 class="flex-1 py-2 px-3 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl text-center flex items-center justify-center gap-1 shadow-sm transition active:scale-95">
+                 class="flex-1 py-2 px-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl text-center flex items-center justify-center gap-1 shadow-sm transition active:scale-95">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
-                <span>Навігатор</span>
+                <span>Google</span>
+              </a>
+              <a id="floating-stop-waze-btn" href="#" target="_blank" 
+                 class="py-2 px-2.5 bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold rounded-xl text-center flex items-center justify-center gap-1 shadow-sm transition active:scale-95">
+                <span>Waze</span>
               </a>
               <button id="floating-stop-done-btn" type="button"
-                      class="py-2 px-3 bg-emerald-50 dark:bg-emerald-950/80 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-bold rounded-xl transition active:scale-95">
-                ✓ Доставлено
+                      class="py-2 px-3 bg-emerald-50 dark:bg-emerald-950/90 hover:bg-emerald-100 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 text-xs font-black rounded-xl transition active:scale-95">
+                ✓ Зроблено
               </button>
             </div>
           </div>
@@ -619,7 +684,7 @@
           <!-- Підказка про клік на карті -->
           <div id="map-hint-pill" class="absolute bottom-3 left-3 z-15 hidden sm:flex items-center gap-2 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm text-xs text-slate-700 dark:text-slate-300 pointer-events-none font-medium">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Клікніть на карті Черкас, щоб додати нову точку</span>
+            <span>Клікніть на карті або перетягніть мітку для точного налаштування</span>
           </div>
 
         </div>
@@ -631,7 +696,7 @@
   </main>
 
   <!-- ==================== ФІКСОВАНА НАВІГАЦІЯ ДЛЯ СМАРТФОНІВ (MOBILE BOTTOM BAR) ==================== -->
-  <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 pb-safe shadow-lg no-print">
+  <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 pb-safe shadow-xl no-print">
     <div class="grid grid-cols-3 max-w-md mx-auto py-1 px-2">
       
       <!-- Вкладка 1: Адреси -->
@@ -708,7 +773,7 @@
 
         <div>
           <h4 class="font-bold text-slate-900 dark:text-white mb-1">🚗 Навігація в дорозі:</h4>
-          <p>Натисніть кнопку <strong>«Google Maps»</strong> для відкриття всього маршруту в навігаторі або кнопку навігації біля будь-якої зупинки.</p>
+          <p>Натисніть кнопку <strong>«Google Maps»</strong> або <strong>«Waze»</strong> для швидкого відкриття навігатора.</p>
         </div>
       </div>
 
@@ -737,7 +802,7 @@
       OSRM_TRIP_URL: 'https://router.project-osrm.org/trip/v1/driving/',
       VIEWBOX: '31.90,49.52,32.22,49.34',
       GEOCODE_DELAY_MS: 1100,
-      CACHE_STORAGE_KEY: 'cherkasy_geocode_cache_osm_v4',
+      CACHE_STORAGE_KEY: 'cherkasy_geocode_cache_osm_v5',
       THEME_STORAGE_KEY: 'cherkasy_route_theme'
     };
 
@@ -892,7 +957,7 @@
       }
     }
 
-    // --- ДИНАМІЧНІ ПОЛЯ АДРЕС З ВИСОКОЮ КОНТРАСТНІСТЮ ---
+    // --- ДИНАМІЧНІ ПОЛЯ АДРЕС ---
     function addAddressField(initialText = '') {
       triggerHaptic();
       const id = 'addr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
@@ -952,7 +1017,6 @@
         const isStart = index === 0;
         const row = document.createElement('div');
         
-        // Чіткий, контрастний вигляд як для світлої, так і для темної теми
         row.className = `flex items-center space-x-2 p-1.5 rounded-xl border transition-all ${
           item.error 
             ? 'border-rose-400 dark:border-rose-700 bg-rose-50/70 dark:bg-rose-950/50' 
@@ -1014,12 +1078,8 @@
     }
 
     // --- ПІДВИЩЕНА ТОЧНІСТЬ ГЕОКОДУВАННЯ NOMINATIM ---
-    /**
-     * Очищення від префіксів (вул., бул., просп.), оскільки Nominatim шукає номер будинку точніше без них
-     */
     function cleanAndNormalizeQuery(raw) {
       let clean = raw.trim();
-      // Очищення префіксів для точного знаходження номерів будинків
       clean = clean.replace(/^(вул\.|вулиця|просп\.|проспект|бул\.|бульвар|пров\.|провулок)\s+/i, '').trim();
       
       const hasCherkasy = /черкас/i.test(clean);
@@ -1039,10 +1099,10 @@
         return state.geocodeCache[cacheKey];
       }
 
-      // Спроба 1: Очищений запит із прив'язкою до Черкас
+      // Спроба 1: Структурований пошук з точним номером будинку
       let result = await executeNominatimFetch(normalized);
 
-      // Спроба 2: Резервний пошук із оригінальним текстом, якщо очищений не знайшов
+      // Спроба 2: Резервний пошук
       if (!result) {
         const rawWithCity = `${addressQuery.trim()}, Черкаси, Україна`;
         result = await executeNominatimFetch(rawWithCity);
@@ -1061,7 +1121,7 @@
         const url = new URL(CONFIG.NOMINATIM_URL);
         url.searchParams.set('q', query);
         url.searchParams.set('format', 'json');
-        url.searchParams.set('limit', '3'); // беремо топ-3 для вибору найточнішого будинку
+        url.searchParams.set('limit', '3');
         url.searchParams.set('countrycodes', 'ua');
         url.searchParams.set('viewbox', CONFIG.VIEWBOX);
         url.searchParams.set('bounded', '0');
@@ -1076,7 +1136,6 @@
         if (!response.ok) return null;
         const data = await response.json();
         if (data && data.length > 0) {
-          // Пріоритет будівлі/номеру будинку над загальною вулицею
           const buildingMatch = data.find(item => item.class === 'building' || item.type === 'yes' || item.type === 'house' || item.place_rank >= 30);
           const best = buildingMatch || data[0];
 
@@ -1306,24 +1365,42 @@
           popupAnchor: [0, -18]
         });
 
-        const marker = L.marker([stop.lat, stop.lon], { icon: markerIcon });
+        // ДРАГ-МАРКЕРИ ДЛЯ НАДТОЧНОГО ПІДЛАШТУВАННЯ ПІД'ЇЗДУ / ВОРОТ
+        const marker = L.marker([stop.lat, stop.lon], { 
+          icon: markerIcon,
+          draggable: true 
+        });
+
+        marker.on('dragend', function(e) {
+          const newPos = e.target.getLatLng();
+          stop.lat = newPos.lat;
+          stop.lon = newPos.lng;
+          triggerHaptic();
+          showToast(`Позицію зупинки №${stopNumber} уточнено вручну!`, 'success', 2500);
+          updateFloatingNextStopWidget();
+        });
 
         const popupContent = `
-          <div class="space-y-1.5 p-1">
+          <div class="space-y-1.5 p-1 text-slate-900 dark:text-white">
             <div class="flex items-center space-x-1.5">
-              <span class="px-2 py-0.5 rounded text-xs font-bold ${
-                isStart ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300' : isFinish ? 'bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300' : 'bg-brand-100 dark:bg-brand-950 text-brand-800 dark:text-brand-300'
+              <span class="px-2 py-0.5 rounded text-xs font-black ${
+                isStart ? 'bg-emerald-100 text-emerald-800' : isFinish ? 'bg-rose-100 text-rose-800' : 'bg-brand-100 text-brand-800'
               }">
                 ${isStart ? 'Старт • №1' : isFinish ? `Фініш • №${stopNumber}` : `Зупинка №${stopNumber}`}
               </span>
             </div>
-            <p class="font-bold text-slate-900 dark:text-white text-sm">${escapeHtml(stop.inputAddress)}</p>
+            <p class="font-extrabold text-sm">${escapeHtml(stop.inputAddress)}</p>
             <p class="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2">${escapeHtml(stop.displayName || '')}</p>
-            <div class="pt-2 flex items-center space-x-2 border-t border-slate-100 dark:border-slate-700">
+            <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">💡 Можна перетягнути мітку для точного заїзду</p>
+            <div class="pt-2 flex items-center space-x-2 border-t border-slate-200 dark:border-slate-700">
               <a href="https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lon}" target="_blank" 
                  class="inline-flex items-center text-xs font-bold text-brand-600 dark:text-brand-400 hover:text-brand-800">
-                <span>Навігатор</span>
+                <span>Google</span>
                 <svg class="w-3 h-3 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+              </a>
+              <a href="https://waze.com/ul?ll=${stop.lat},${stop.lon}&navigate=yes" target="_blank" 
+                 class="inline-flex items-center text-xs font-bold text-sky-500 hover:text-sky-700 ml-2">
+                <span>Waze</span>
               </a>
             </div>
           </div>
@@ -1451,7 +1528,7 @@
             <div class="flex items-center space-x-1 no-print">
               <a href="https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lon}" target="_blank"
                  class="p-2 text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-700 transition active:scale-90"
-                 title="Навігатор до цієї точки">
+                 title="Google Maps">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
               </a>
               <button type="button" class="btn-copy-single-addr p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition active:scale-90" title="Скопіювати адресу">
@@ -1630,6 +1707,9 @@
       const navBtn = document.getElementById('floating-stop-nav-btn');
       navBtn.href = `https://www.google.com/maps/dir/?api=1&destination=${nextStop.lat},${nextStop.lon}`;
 
+      const wazeBtn = document.getElementById('floating-stop-waze-btn');
+      wazeBtn.href = `https://waze.com/ul?ll=${nextStop.lat},${nextStop.lon}&navigate=yes`;
+
       const doneBtn = document.getElementById('floating-stop-done-btn');
       doneBtn.onclick = () => {
         const chk = document.getElementById(`chk-stop-${nextStop.id}`);
@@ -1736,7 +1816,7 @@
       });
     }
 
-    // --- НАДТОЧНИЙ GPS З ВІДОБРАЖЕННЯМ РАДІУСА ТОЧНОСТІ ---
+    // --- НАДТОЧНИЙ СУПУТНИКОВИЙ GPS З КАЛІБРУВАННЯМ ---
     function useCurrentGeolocation() {
       if (!navigator.geolocation) {
         showToast('Ваш браузер не підтримує геолокацію', 'error');
@@ -1744,78 +1824,97 @@
       }
 
       triggerHaptic();
-      showToast('Шукаємо точні GPS-координати супутника...', 'info', 3000);
+      showToast('Калібруємо GPS через супутники для максимальної точності...', 'info', 3000);
 
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-          const accuracy = Math.round(position.coords.accuracy);
+      // Використовуємо watchPosition для відбору координати з найменшою похибкою
+      let bestPos = null;
+      let watchId = null;
 
-          // Очищаємо попередній GPS шар
-          state.userLocationLayer.clearLayers();
+      const finishGps = async () => {
+        if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+        if (!bestPos) return;
 
-          // Малюємо коло точності GPS
-          L.circle([lat, lon], {
-            radius: Math.max(accuracy, 15),
-            color: '#3b82f6',
-            fillColor: '#93c5fd',
-            fillOpacity: 0.25,
-            weight: 1.5
-          }).addTo(state.userLocationLayer);
+        const lat = bestPos.coords.latitude;
+        const lon = bestPos.coords.longitude;
+        const accuracy = Math.round(bestPos.coords.accuracy);
 
-          // Пульсуючий маркер позиції водія
-          const gpsIcon = L.divIcon({
-            className: 'custom-gps-icon',
-            html: `
-              <div class="relative w-5 h-5 flex items-center justify-center">
-                <div class="gps-pulse-ring"></div>
-                <div class="w-4 h-4 bg-blue-600 border-2 border-white rounded-full shadow-md"></div>
-              </div>
-            `,
-            iconSize: [20, 20],
-            iconAnchor: [10, 10]
-          });
+        state.userLocationLayer.clearLayers();
 
-          L.marker([lat, lon], { icon: gpsIcon })
-            .bindPopup(`<b>Ви тут</b><br>Точність GPS: ±${accuracy} м`)
-            .addTo(state.userLocationLayer);
+        // Синє коло радіуса похибки
+        L.circle([lat, lon], {
+          radius: Math.max(accuracy, 10),
+          color: '#3b82f6',
+          fillColor: '#93c5fd',
+          fillOpacity: 0.25,
+          weight: 1.5
+        }).addTo(state.userLocationLayer);
 
-          try {
-            const url = `${CONFIG.NOMINATIM_REVERSE_URL}?lat=${lat}&lon=${lon}&format=json`;
-            const resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
-            const data = await resp.json();
-            
-            let addressText = 'Моє місцезнаходження';
-            if (data && data.address) {
-              const road = data.address.road || '';
-              const house = data.address.house_number || '';
-              if (road) addressText = `${road} ${house}`.trim();
-              else if (data.display_name) addressText = data.display_name.split(',')[0];
-            }
+        const gpsIcon = L.divIcon({
+          className: 'custom-gps-icon',
+          html: `
+            <div class="relative w-5 h-5 flex items-center justify-center">
+              <div class="gps-pulse-ring"></div>
+              <div class="w-4 h-4 bg-blue-600 border-2 border-white rounded-full shadow-md"></div>
+            </div>
+          `,
+          iconSize: [20, 20],
+          iconAnchor: [10, 10]
+        });
 
-            if (state.addresses.length > 0) {
-              state.addresses[0].text = addressText;
-              state.addresses[0].lat = lat;
-              state.addresses[0].lon = lon;
-            } else {
-              addAddressField(addressText);
-            }
-            renderAddressInputs();
-            showToast(`GPS знайдено: ${addressText} (точність ±${accuracy}м)`, 'success', 3500);
-            state.map.setView([lat, lon], 16);
-          } catch (e) {
-            if (state.addresses.length > 0) {
-              state.addresses[0].text = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
-            }
-            renderAddressInputs();
+        L.marker([lat, lon], { icon: gpsIcon })
+          .bindPopup(`<b>Точна позиція</b><br>Похибка: ±${accuracy} м`)
+          .addTo(state.userLocationLayer);
+
+        try {
+          const url = `${CONFIG.NOMINATIM_REVERSE_URL}?lat=${lat}&lon=${lon}&format=json`;
+          const resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
+          const data = await resp.json();
+          
+          let addressText = 'Моє місцезнаходження';
+          if (data && data.address) {
+            const road = data.address.road || '';
+            const house = data.address.house_number || '';
+            if (road) addressText = `${road} ${house}`.trim();
+            else if (data.display_name) addressText = data.display_name.split(',')[0];
+          }
+
+          if (state.addresses.length > 0) {
+            state.addresses[0].text = addressText;
+            state.addresses[0].lat = lat;
+            state.addresses[0].lon = lon;
+          } else {
+            addAddressField(addressText);
+          }
+          renderAddressInputs();
+          showToast(`Точне GPS: ${addressText} (похибка ±${accuracy}м)`, 'success', 3500);
+          state.map.setView([lat, lon], 17);
+        } catch (e) {
+          if (state.addresses.length > 0) {
+            state.addresses[0].text = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+          }
+          renderAddressInputs();
+        }
+      };
+
+      watchId = navigator.geolocation.watchPosition(
+        (pos) => {
+          if (!bestPos || pos.coords.accuracy < bestPos.coords.accuracy) {
+            bestPos = pos;
+          }
+          if (pos.coords.accuracy <= 15) {
+            finishGps();
           }
         },
-        (err) => {
-          showToast('Не вдалося отримати GPS: увімкніть геолокацію в телефоні/браузері', 'warning');
+        () => {
+          if (!bestPos) showToast('Не вдалося отримати GPS. Увімкніть геолокацію в телефоні.', 'warning');
         },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+        { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
       );
+
+      // Якщо за 2.5 секунди не досягли 15м, беремо найкращу позицію
+      setTimeout(() => {
+        if (bestPos) finishGps();
+      }, 2500);
     }
 
     // --- МОБІЛЬНА НАВІГАЦІЯ ТА СЛУХАЧІ ПОДІЙ ---
@@ -1831,12 +1930,12 @@
       const resultsPanel = document.getElementById('results-panel');
 
       [btnAddr, btnMap, btnRoute].forEach(btn => {
-        btn.classList.remove('text-brand-600', 'dark:text-brand-400', 'font-bold');
-        btn.classList.add('text-slate-500', 'dark:text-slate-400', 'font-medium');
+        btn.classList.remove('text-brand-600', 'dark:text-brand-400', 'font-black');
+        btn.classList.add('text-slate-500', 'dark:text-slate-400', 'font-bold');
       });
 
       if (tab === 'addresses') {
-        btnAddr.classList.add('text-brand-600', 'dark:text-brand-400', 'font-bold');
+        btnAddr.classList.add('text-brand-600', 'dark:text-brand-400', 'font-black');
         btnAddr.classList.remove('text-slate-500', 'dark:text-slate-400');
 
         sidebarPanel.classList.remove('hidden');
@@ -1844,7 +1943,7 @@
         mapPanel.classList.add('hidden');
         resultsPanel.classList.add('hidden');
       } else if (tab === 'map') {
-        btnMap.classList.add('text-brand-600', 'dark:text-brand-400', 'font-bold');
+        btnMap.classList.add('text-brand-600', 'dark:text-brand-400', 'font-black');
         btnMap.classList.remove('text-slate-500', 'dark:text-slate-400');
 
         mapPanel.classList.remove('hidden');
@@ -1855,7 +1954,7 @@
           if (state.map) state.map.invalidateSize();
         }, 120);
       } else if (tab === 'route') {
-        btnRoute.classList.add('text-brand-600', 'dark:text-brand-400', 'font-bold');
+        btnRoute.classList.add('text-brand-600', 'dark:text-brand-400', 'font-black');
         btnRoute.classList.remove('text-slate-500', 'dark:text-slate-400');
 
         sidebarPanel.classList.remove('hidden');
