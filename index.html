@@ -89,7 +89,7 @@
 
     .street-input {
       font-size: 16px !important;
-      background-color: #0d1627 !important;
+      background-color: transparent !important;
       border: 1.5px solid #283a57 !important;
       color: #ffffff !important;
       -webkit-text-fill-color: #ffffff !important;
@@ -127,7 +127,7 @@
 
     /* Картки введення адрес */
     .address-item-card {
-      background-color: #15223a !important;
+      background-color: transparent !important;
       border: 1.5px solid #283c5e !important;
       border-radius: 1rem;
       transition: all 0.2s ease;
@@ -473,7 +473,7 @@
               Вставте адреси списком (по одній у рядку). Дописувати "Черкаси" не обов'язково:
             </p>
             <textarea id="bulk-textarea" rows="7" 
-                      class="bulk-input-text w-full text-sm sm:text-base rounded-xl border border-[#2b3e5e] shadow-inner focus:border-sky-400 focus:ring-2 focus:ring-sky-400/30 p-3 bg-[#0d1627] text-white placeholder-slate-400 font-bold caret-sky-400"
+                      class="bulk-input-text w-full text-sm sm:text-base rounded-xl border border-[#2b3e5e] shadow-inner focus:border-sky-400 focus:ring-2 focus:ring-sky-400/30 p-3 bg-transparent text-white placeholder-slate-400 font-bold caret-sky-400"
                       placeholder="бул. Шевченка, 185&#10;вул. Смілянська, 2&#10;вул. Хрещатик, 223&#10;вул. Сумгаїтська, 10"></textarea>
             <button id="btn-import-bulk" type="button" 
                     class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold rounded-xl transition shadow-md active:scale-98">
@@ -1169,7 +1169,7 @@
         
         row.className = 'address-item-card p-2 sm:p-2.5 rounded-2xl transition-all';
         row.style.cssText = `
-          background-color: #15223a !important;
+          background-color: transparent !important;
           border: 1.5px solid ${item.error ? '#f43f5e' : '#283c5e'} !important;
           color: #ffffff !important;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
@@ -1194,7 +1194,7 @@
                      autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"
                      value="${escapeHtml(item.text)}"
                      placeholder="Вулиця та номер (напр. Смілянська, 2)"
-                     style="background-color: #0d1627 !important; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; caret-color: #38bdf8 !important; border: 1.5px solid #283a57 !important;"
+                     style="background-color: transparent !important; color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; caret-color: #38bdf8 !important; border: 1.5px solid #283a57 !important;"
                      class="street-input w-full py-1.5 px-3 rounded-xl font-bold text-sm sm:text-base outline-none tracking-tight shadow-inner"
               />
               <!-- Dropdown список підказок вулиць -->
